@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+
+{% block title %}{{ config.title }} | {{ page.title }}{% endblock title %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock description %}
+
+{% block header %}
+<header class="space">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img class="logo-white" src="{{ get_url(path='logo_white.svg') }}" width="426.5" height="123.5" alt="{{ config.title }}">
+        <img class="logo-black" src="{{ get_url(path='logo_black.svg') }}" width="426.5" height="123.5" alt="{{ config.title }}">
+        <h2>RESEARCH LOG</h2>
+    </div>
+    <a href="{{ config.base_url }}">&LeftArrow; Home</a>
+</header>
+{% endblock header %}
+
+{% block content %}
+<main>
+    <h1>{{ page.title }}</h1>
+    {% if page.date %}
+    <p class="secondary">{{ page.date | date(format="%-d %B, %Y") }}</p>
+    {% endif %}
+    <div class="space"></div>
+    {{ page.content | safe }}
+</main>
+{% endblock content %}
