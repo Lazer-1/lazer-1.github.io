@@ -18,7 +18,18 @@
 <main>
     <h1>{{ page.title }}</h1>
     {% if page.date %}
-    <p class="secondary">{{ page.date | date(format="%-d %B, %Y") }}</p>
+    <p class="secondary" style="display: inline">{{ page.date | date(format="%-d %B, %Y") }}</p>
+    {% if page.authors %}
+    <p class="secondary" style="display: inline">|</p>
+    {% endif %}
+    {% endif %}
+    {% if page.authors %}
+    <p class="secondary" style="display: inline">
+        Written by
+        {% for author in page.authors %}
+            <a href="https://github.com/{{ author }}" target="_blank">{{ author }}</a>
+        {% endfor %}
+    </p>
     {% endif %}
     <div class="space"></div>
     {{ page.content | safe }}

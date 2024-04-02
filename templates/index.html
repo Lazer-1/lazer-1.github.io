@@ -48,7 +48,6 @@
         </div>
         {% endif %}
         {% if blog.pages %}
-        <h2>Recent posts</h2>
         <ul>
             {% for post in blog.pages | slice(end=20) %}
             <li><a href="{{ post.permalink }}">{{ post.title }}</a></li>

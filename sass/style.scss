@@ -105,6 +105,10 @@ table {
     }
 }
 
+ul {
+    list-style: none;
+}
+
 @media all and (max-width: 1200px) {
     body {
         padding: 3em 15%;

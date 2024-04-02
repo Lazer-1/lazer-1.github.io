@@ -10,6 +10,8 @@ build_search_index = true
 title = "Lazer 1 Research"
 description = "Blockchain L1, L2 Research"
 
+author = "9oelm"
+
 theme = "hook"
 [markdown]
 # Whether to do syntax highlighting
