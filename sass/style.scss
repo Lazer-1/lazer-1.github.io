@@ -17,6 +17,10 @@ html, body {
   padding: 0;
 }
 
+code {
+    font-family: "Martian Mono", monospace;
+}
+
 body {
   font-family: "Archivo Black", sans-serif;
   font-size: 14pt;
@@ -105,8 +109,12 @@ table {
     }
 }
 
-ul {
+.no-list-bullet {
     list-style: none;
+}
+
+p, a {
+    overflow-wrap: break-word;
 }
 
 @media all and (max-width: 1200px) {
