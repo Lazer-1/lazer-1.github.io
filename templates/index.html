@@ -16,6 +16,15 @@
     <link rel="alternate" type="application/atom+xml" title="Feed" href="{{ get_url(path=config.feed_filename, trailing_slash=false) }}">
     {% endif %}
     {% endblock %}
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPG624LQM9"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FPG624LQM9');
+    </script>
 </head>
 <body>
     {% block header %}
