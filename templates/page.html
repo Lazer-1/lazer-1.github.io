@@ -19,9 +19,9 @@
     <h1>{{ page.title }}</h1>
     {% if page.date %}
     <p class="secondary" style="display: inline">{{ page.date | date(format="%-d %B, %Y") }}</p>
-    {% if page.authors %}
-    <p class="secondary" style="display: inline">|</p>
-    {% endif %}
+        {% if page.authors %}
+            <p class="secondary" style="display: inline">|</p>
+        {% endif %}
     {% endif %}
     {% if page.authors %}
     <p class="secondary" style="display: inline">
@@ -30,6 +30,34 @@
             <a href="https://github.com/{{ author }}" target="_blank">{{ author }}</a>
         {% endfor %}
     </p>
+    {% endif %}
+    {% if page.toc %}
+    <h2>Table of Contents</h2>
+    <ul>
+        {% for h1 in page.toc %}
+            <li>
+                <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+                {% if h1.children %}
+                    <ul>
+                        {% for h2 in h1.children %}
+                            <li>
+                                <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                                {% if h2.children %}
+                                    <ul>
+                                        {% for h3 in h2.children %}
+                                            <li>
+                                                <a href="{{ h3.permalink | safe }}">{{ h3.title }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
     {% endif %}
     <div class="space"></div>
     {{ page.content | safe }}
