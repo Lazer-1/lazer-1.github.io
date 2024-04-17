@@ -6,6 +6,19 @@
     <meta name="description" content="{% block description %}{{ section.description | default(value=config.description) }}{% endblock description %}">
     <title>{% block title %}{{ config.title }}{% endblock title %}</title>
     {% block extra_head %}
+    <!-- og tags -->
+    <meta property="og:title" content="{{ config.title }}">
+    <meta property="og:description" content="{{ section.description | default(value=config.description) }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config.base_url }}">
+    <meta property="og:image" content="{{ get_url(path='logo_black.svg') }}">
+    <!-- twitter (big card)-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@lazer_1_xyz">
+    <meta name="twitter:creator" content="@lazer_1_xyz">
+    <meta name="twitter:title" content="{{ config.title }}">
+    <meta name="twitter:description" content="{{ section.description | default(value=config.description) }}">
+    <meta name="twitter:image" content="{{ get_url(path='logo_black.svg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Staatliches&family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
