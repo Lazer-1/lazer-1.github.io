@@ -117,6 +117,12 @@ p, a {
     overflow-wrap: break-word;
 }
 
+.post-link {
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+    display: inline-block;
+}
+
 @media all and (max-width: 1200px) {
     body {
         padding: 3em 15%;
