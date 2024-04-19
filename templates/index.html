@@ -72,7 +72,7 @@
         {% if blog.pages %}
         <ul class="no-list-bullet">
             {% for post in blog.pages | slice(end=20) %}
-            <li><a href="{{ post.permalink }}">{{ post.title }}</a></li>
+            <li><a class="post-link" href="{{ post.permalink }}">{{ post.title }}</a></li>
             {% endfor %}
         </ul>
         <p><a href="{{ blog.permalink }}">Archive</a></p>
