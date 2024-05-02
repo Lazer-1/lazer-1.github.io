@@ -249,3 +249,22 @@ $$
 $$
 \text{amount to vest} = \frac{upper \times middle}{lower}
 $$
+
+In `claimAirdrop`, a vesting schedule is created for that user by calling `createVestingSchedule`:
+
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeRewardsVesting.sol%23L375-L425&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+
+When claimAirdrop calls `createVestingSchedule`, `daysToCliff` is set as zero, so the ITO participants are able to claim the vested amount right away because it is a simple linear vesting schedule:
+
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeRewardsVesting.sol%23L277-L294&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+
+ITO participants will be able to claim `vestingScheduleOf[account].vestingPerSecond * (block.timestamp - vestingScheduleOf[account].start) - vestingScheduleOf[account].totalWithdrawn;` at any point.
+
+## Rewards
+
+Zivoe maintains three types of 'rewards' contract:
+- `stJTT`: staked junior tranche token
+- `stSTT`: staked senior tranche token
+- `stZVE`: staked Zivoe Token
+
+Each of these tokens is managed by [`ZivoeRewards` contract](https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/ZivoeRewards.sol#L26-L26), which facilites staking and yield distribution from staking.
