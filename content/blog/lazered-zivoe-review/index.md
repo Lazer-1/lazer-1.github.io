@@ -1,6 +1,6 @@
 +++
 title = "Lazered #0: Zivoe review"
-date = 2024-04-17
+date = 2024-04-17T00:00:00Z
 authors = ["9oelm"]
 sort_by = "date"
 

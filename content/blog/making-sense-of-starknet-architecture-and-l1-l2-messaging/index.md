@@ -1,6 +1,6 @@
 +++
 title = "Making sense of Starknet architecture and L1-L2 Messaging"
-date = 2024-03-28
+date = 2024-03-28T00:00:00Z
 authors = ["9oelm"]
 sort_by = "date"
 +++
