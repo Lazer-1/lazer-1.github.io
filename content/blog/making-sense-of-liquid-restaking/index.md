@@ -144,13 +144,13 @@ Restaking unlocks new opportunities for stakers: they no longer have to lock the
 
 Then, rswETH can just be used like ETH, transferred around or deposited into another DeFi protocol.
 
-## Swell L2
+<!-- ## Swell L2
 
 Swell is planning to launch its own L2, and many think that it is the epitome of the state-of-the-art modular blockchain.
 
 ![swell-l2-architecture.png](/blog/making-sense-of-liquid-restaking/swell-l2-architecture.png)
 
-Each specific blockchain module will handle a specific layer, as described in the image above.
+Each specific blockchain module will handle a specific layer, as described in the image above. -->
 
 <!-- # The future of restaking landscape -->
 
