@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blockchain L1, L2 and DeFi Research">
+    <title>Lazer 1 Research | Archive</title>
+    
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@lazer_1_xyz">
+<meta name="twitter:creator" content="@lazer_1_xyz">
+
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://research.lazer1.xyz/blog/" />
+
+<meta property="og:image" content="https://research.lazer1.xyz/logo_black.svg">
+<meta name="twitter:image" content="https://research.lazer1.xyz/logo_black.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Staatliches&family=Martian+Mono:wght@100..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://research.lazer1.xyz/style.css?h=7e5a9b92f5ba9f34c48d">
+
+
+    
+    
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPG624LQM9"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FPG624LQM9');
+    </script>
+</head>
+<body>
+    
+<header class="space">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img class="logo-white" src="https://research.lazer1.xyz/logo_white.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <img class="logo-black" src="https://research.lazer1.xyz/logo_black.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <h2>RESEARCH LOG</h2>
+    </div>
+    <a href="https:&#x2F;&#x2F;research.lazer1.xyz">&LeftArrow; Home</a>
+</header>
+
+    
+<main>
+    <h1>Archive</h1>
+    
+    
+    <h2>2024</h2>
+    <ul>
+        
+        <li><a href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;making-sense-of-starknet-architecture-and-l1-l2-messaging&#x2F;">Making sense of Starknet architecture and L1-L2 Messaging</a></li>
+        
+        <li><a href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;making-sense-of-liquid-restaking&#x2F;">Making sense of liquid restaking</a></li>
+        
+    </ul>
+    
+    
+</main>
+
+    <div class="dark-mode-buttons">
+        <button class="dark-mode-button" id="dark-mode-on"><img src="https://research.lazer1.xyz/dark_mode.svg" width="24" height="24" alt="Dark mode" aria-label="dark mode toggle" title="Dark mode"></button>
+        <button class="dark-mode-button" id="dark-mode-off"><img src="https://research.lazer1.xyz/light_mode.svg" width="24" height="24" alt="Light mode" aria-label="light mode toggle" title="Light mode"></button>
+    </div>
+    <script>
+        const cls = document.body.classList;
+        const getSessionTheme = sessionStorage.getItem("theme");
+        if (getSessionTheme === "dark") {
+            cls.toggle("dark-mode", true);
+        } else if (getSessionTheme === "light") {
+            cls.toggle("dark-mode", false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            cls.toggle("dark-mode", true);
+        }
+
+        document.getElementById("dark-mode-on").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", true);
+            sessionStorage.setItem("theme", "dark");
+        });
+        document.getElementById("dark-mode-off").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", false);
+            sessionStorage.setItem("theme", "light");
+        });
+    </script>
+    <noscript>
+        <style>
+            .dark-mode-buttons {
+                display: none;
+            }
+        </style>
+    </noscript>
+</body>
+</html>
