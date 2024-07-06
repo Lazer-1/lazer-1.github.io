@@ -115,7 +115,13 @@ This returns true if there is at least one bit of data or one ref (if you want t
 
 Because we don't want to process empty message body, we immediately return.
 
+Next, we process the flags. There isn't a lot of information about the "bounced" flag, but by looking at the code we can assume that the bounced flag is a single bit the end of the 32-bytes long flags. If it is bounced, it will be 1. If not, it will be 0. Like: 0b01010101011111..... and 1 (or 0).
 
+Next, the sender address is loaded by `sender_address`, `op`, `query_id` are loaded.
+
+Note that `sender_address` is from `in_msg_full`, while `op` and `query_id` are from `in_msg_body`, marking the beginning of the message body.
+
+[The message body's structure](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#internal-message-body) is always 32-bit (big-endian) unsigned integer `op`, followed by 64-bit (big-endian) unsigned integer `query_id`. Then the rest of the message body depends on the `op`.
 
 - [[TON Blog] How to shard your TON smart contract and why - studying the anatomy of TON's Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [[TON Blog] Six unique aspects of TON Blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
