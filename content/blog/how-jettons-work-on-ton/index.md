@@ -115,13 +115,58 @@ This returns true if there is at least one bit of data or one ref (if you want t
 
 Because we don't want to process empty message body, we immediately return.
 
-Next, we process the flags. There isn't a lot of information about the "bounced" flag, but by looking at the code we can assume that the bounced flag is a single bit the end of the 32-bytes long flags. If it is bounced, it will be 1. If not, it will be 0. Like: 0b01010101011111..... and 1 (or 0).
+Next, we process the flags. There isn't a lot of information about the "bounced" flag, but by looking at the code we can assume that the bounced flag is a single bit the end of the 32-bytes long flags. If it is bounced, it will be 1. If not, it will be 0. Like: 0b01010101011111....._1_ (or 0).
 
 Next, the sender address is loaded by `sender_address`, `op`, `query_id` are loaded.
 
 Note that `sender_address` is from `in_msg_full`, while `op` and `query_id` are from `in_msg_body`, marking the beginning of the message body.
 
 [The message body's structure](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#internal-message-body) is always 32-bit (big-endian) unsigned integer `op`, followed by 64-bit (big-endian) unsigned integer `query_id`. Then the rest of the message body depends on the `op`.
+
+We've already covered `load_data()`, so we pass on this one.
+
+Now, we are finally dealing with different `op`s. Each if statement handles one `op`.
+
+We need to look at [op-codes.fc](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/op-codes.fc) first:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:268px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fop-codes.fc%23L1-L9&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+`op-codes.fc` is included into `jetton-minter.fc` upon build, making `op::*` functions callable in it:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fcompile.sh%23L3-L3&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+An opcode is nothing but a number. For example, `int op::transfer() asm "0xf8a7ea5 PUSHINT";` means transfer has an opcode of `0xf8a7ea5`.
+
+Do note that it is also possible to define an opcode by using a newer syntax:
+
+```ts
+const int op::transfer = 0xf8a7ea5;
+```
+
+Let's go back to `if (op == op::mint())` and have a look at what's inside the if statement:
+
+```js
+if (op == op::mint()) {
+    throw_unless(73, equal_slices(sender_address, admin_address));
+    slice to_address = in_msg_body~load_msg_addr();
+    int amount = in_msg_body~load_coins();
+    cell master_msg = in_msg_body~load_ref();
+    slice master_msg_cs = master_msg.begin_parse();
+    master_msg_cs~skip_bits(32 + 64); ;; op + query_id
+    int jetton_amount = master_msg_cs~load_coins();
+    mint_tokens(to_address, jetton_wallet_code, amount, master_msg);
+    save_data(total_supply + jetton_amount, admin_address, content, jetton_wallet_code);
+    return ();
+}
+```
+
+`throw_unless(73, equal_slices(sender_address, admin_address));` will throw if `sender_address` is not equal to `admin_address`. The reason is pretty obvious; if new tokens can be minted by anyone, that is an immediate vulnerability. The error code is `73`.
+
+The labels of the error codes are located at `JettonConstants.ts`:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:394px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fwrappers%2FJettonConstants.ts%23L16-L28&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+From this, we know that the error code `73` means "not admin".
 
 - [[TON Blog] How to shard your TON smart contract and why - studying the anatomy of TON's Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
 - [[TON Blog] Six unique aspects of TON Blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
