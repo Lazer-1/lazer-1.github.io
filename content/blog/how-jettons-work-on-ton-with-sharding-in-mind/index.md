@@ -135,7 +135,7 @@ We need to look at [op-codes.fc](https://github.com/ton-blockchain/token-contrac
 
 <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fcompile.sh%23L3-L3&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
-An opcode is nothing but a number. For example, `int op::transfer() asm "0xf8a7ea5 PUSHINT";` means transfer has an opcode of `0xf8a7ea5`.
+An opcode is nothing but a number. For example, `int op::transfer() asm "0xf8a7ea5 PUSHINT";` means transfer has an opcode of `0xf8a7ea5`. We will cover how this opcode is derived in the later section.
 
 Do note that it is also possible to define an opcode by using a newer syntax:
 
@@ -197,13 +197,99 @@ The meaning of `1 + 4 + 4 + 64 + 32 + 1 + 1 + 1` is the following [^1]:
 
 > Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. In fact, since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put there zeroes.
 
-> Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings. (we had alredy serialized the message header and passed to init/body at that moment)
+> Then we put zero to `created_lt` and `created_at` fields. Those fields will be overwritten as well; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings. (we had already serialized the message header and passed to init/body at that moment)
 
 > Next zero-bit means that there is no init field.
 
 > The last zero-bit means that `msg_body` will be serialized in-place.
 
 > After that, message body (with arbitrary layout) is encoded.
+
+Now, you must be wondering where this particular order of serialization came from. This rule in TON is called TL-B scheme. Let us look into that closely before going any further.
+
+## TL-B schemes
+
+TL-B stands for Type Language - Binary. It is a language designed to describe the type system, constructors and functions. Even the `message` that we send can be described by TL-B because it has a certain structure: 
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:226px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L155-L161&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+This is `MessageRelaxed` type that we send as a parameter of `send_raw_message`. We note that the message has three parts:
+1. `info`
+2. `init`
+3. `body`
+
+We will only deal with `MessageRelaxed` instead of `Message` for the purpose of explanation:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:142px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L159-L161&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+`message$_` is the constructor. Constructor tag is the postfix after the dollar sign: `$_`. In this case, `_` means there is no prefix of any bits at the beginning of the structure.
+
+Also, note that the type declaration is different from some languages like Typescript, where the name of the type is on LHS, like `type MyType = number`. In TL-B, that is reverse. 
+
+It refers to three different custom types:
+1. `info:CommonMsgInfoRelaxed`
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:205px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L135-L140&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    Either of the definition can be used. We can know that the message falls into either type when deserializing, by looking at the prefix. 
+    
+    `int_msg_info$0` starts with a 1-bit-long prefix of `0`. Similarly, `ext_out_msg_info$11` starts with 2-bits-long prefix of `11`.
+
+    Each `Bool` type accounts for a single bit, being either `0` or `1`:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:121px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L4-L5&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    `MsgAddress` and `MsgAddressInt` is defined as the following:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:310px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L100-L110&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    No need to digest everything about the address. For now, we just understand that this can be an address.
+
+    Next is `CurrencyCollection`:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:163px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L121-L124&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    We don't care about `ExtraCurrencyCollection` for now because it's not used.  `Grams` is defined as below:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L116&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    `VarUInteger` is simply `var_uint$_ {n:#} len:(#< n) value:(uint (len * 8)) = VarUInteger n;`. So `VarUInteger n` is just another notation for saying "An unsigned integer that is `n` bytes (not bits) long`.
+
+    From [the official paper detailing TON](https://docs.ton.org/tblkch.pdf):
+
+    > If one wants to represent $x$ nanograms, one selects an integer $l < 16$ such that $x < 2^{8l}$, and serializes first $l$ as an unsigned 4-bit integer, then $x$ itself as an unsigned $8l$-bit integer. 
+    
+    > Notice that four zero bits represent a zero amount of $Grams$. Recall that the original total supply of $Grams$ is fixed at five billion (i.e., $5 · 1018 < 2^{63}$ nanograms), and is expected to grow very slowly. Therefore, all the amounts of $Grams$ encountered in practice will fit in unsigned or even signed 64-bit integers. The validators may use the 64-bit integer representation of Grams in their internal computations; however, the serialization of these values the blockchain is another matter.
+
+    After that, `ihr_fee` and `fwd_fee` are also of type `Grams`, so we know what to do for them too. `created_lt` and `created_at` are simply `uint64` and `uint32` fields.
+
+2. `init:(Maybe (Either StateInit ^StateInit))`
+
+    So what are `Maybe` and `Either`?
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:163px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L8-L11&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    According to TL-B definition, when a type is `Maybe X`, it's prefixed with `0` or `1`. When it's prefixed with `0`, nothing is there for you to deserialize; it's an empty piece of data. When `1`, it contains a value of type `X`. For example, `(Maybe int32)` can be just `0` or `100000000000000000000000000000011` (in binary) to denote 3 in decimal, where the leftmost bit is a prefix that tells that there is data.
+
+    `Either` works in a similar way; if prefixed with `0`, that means the data will contain `X`. If `1`, the data will contain `Y`. For example, possible values of type `(Either Bool int32)` are: `00` (`Bool` and `false`), `01` (`Bool` and `true`), or something like `100000000000000000000000000000011` (`int32` and 3 in decimal).
+
+    Back to the original type, we have `(Either StateInit ^StateInit)`. `^` means the field is a reference to another cell of the same type, instead of being an explicit field in the current cell.
+
+    But before `Either`, we have `(Maybe (Either StateInit ^StateInit))`, so this means that we might or might not have `StateInit`, and if we have it, it is either stored in the current cell, or a reference to another cell.
+
+    `StateInit` is defined as follows:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:142px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L144-L146&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    `StateInit` serves to delivery inital data to contract and used in contract deployment. The first field is `split_depth`, of type `(## 5)`. `## 5` means a 5-bit integer. For more, have a look at [StateInit TL-B scheme](https://docs.ton.org/develop/data-formats/msg-tlb#stateinit-tl-b). But as of now, `split_depth`, `special` and `library` are unused. `code` is contract's serialized code, and `data` is contract's initial data.
+
+3. `body:(Either X ^X)`
+
+    Notice that the first line of the scheme has `message$_ {X:Type}`. This is a parametrized type. We use this to mean the type of `X` can be determined at the time of using the type. When it is used to denote the type of another type, it can be used as `(TypeName concreteType)`, like `(MessageRelaxed Any)` or `(MessageRelaxed uint32)`:
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L381&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+    If you have been following carefully, you should see that `body:(Either X ^X)` means a type of `X`, or a reference to a cell containing type `X`.
 
 ## References
 
@@ -215,3 +301,4 @@ The meaning of `1 + 4 + 4 + 64 + 32 + 1 + 1 + 1` is the following [^1]:
 - [[Github] awesome-ton-smart-contracts](https://github.com/dkeysil/awesome-ton-smart-contracts)
 - [[Youtube] Technical Demo: Sharded Smart Contract Architecture for Smart Contract Developers](https://youtu.be/svOadLWwYaM)
 - [TVM Whitepaper](https://docs.everscale.network/tvm.pdf)
+- [[Github] `block.tlb`](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L381)
