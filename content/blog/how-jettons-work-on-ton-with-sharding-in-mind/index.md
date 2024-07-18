@@ -249,7 +249,7 @@ It refers to three different custom types:
 
     <iframe frameborder="0" scrolling="no" style="width:100%; height:163px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L121-L124&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
-    We don't care about `ExtraCurrencyCollection` for now because it's not used.  `Grams` is defined as below:
+    We don't care about `ExtraCurrencyCollection` for now because it's not used. `Grams` is defined as below:
 
     <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L116&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
@@ -290,6 +290,156 @@ It refers to three different custom types:
     <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L381&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
     If you have been following carefully, you should see that `body:(Either X ^X)` means a type of `X`, or a reference to a cell containing type `X`.
+
+## Message in `mint_tokens`
+
+Now, let's go back to the structure of message in `mint_tokens`:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:331px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-minter.fc%23L29-L40&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+First, `0x18` is `0b011000`, so we know that this message has `int_msg_info$0` as the constructor of `CommonMsgInfoRelaxed` because it starts with `0`, while others start with `10` and `11` (`ext_in_msg_info$10` and `ext_out_msg_info$11`). And most importantly, `int_msg_info` means 'internal' message, which is a message to be sent in between contracts only. 
+
+```ts
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+  src:MsgAddress dest:MsgAddressInt 
+  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
+```
+
+Then:
+1. the second leftmost bit is `1`, which means `ihr_disabled` is `bool_true$1`. 
+1. The next bit is `1`, meaning `bounce` is `bool_true$1`. 
+1. The next bit is `0`, meaning `bounced` is `bool_false$0`.
+1. The next two bits are `00`, meaning `addr_none$00 = MsgAddressExt;` is used, because [`_ _:MsgAddressExt = MsgAddress;`](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L110C1-L110C32).
+1. `store_slice(to_wallet_address)` means we are storing `dest:MsgAddressInt`.
+1. `store_coins(amount)` means we are storing `CurrencyCollection`. Recall that `ExtraCurrencyCollection` is not used, so we only care about storing `Grams`. `amount` should actually be less than `120` bits long integer, [according to the spec](https://docs.ton.org/develop/func/stdlib#store_coins).
+1. `.store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)` means the following:
+    1. First of all, the uint value to be stored is `4 + 2 + 1 = 0b111`. Given the length of 108, it would actually look like this: 
+        `000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000111`
+    1. The first 1 bit means empty `ExtraCurrencies` dictionary; `0` stands for empty dictionary bit.
+    1. The next two 4-bit long fields are `ihr_fee` and `fwd_fee`. Full of 0.
+    1. The 64-bit field is `created_lt`. Full of 0.
+    1. The 32-bit field is `created_at`. Full of 0.
+    1. The next 1 bit is for the `init` field, because we are done with `CommonMsgInfoRelaxed` and at `init:(Maybe (Either StateInit ^StateInit))`. And recall that when `Maybe` starts with 0, it means there is nothing, and if 1, there is something. In this case, we have our first 1. After that, we also have another 1, which means `StateInit` is stored in another cell.
+    1. The next 1 bit is for `body:(Either X ^X)`. Recall that if the bit is 0, it means we're storing `X` in the current cell. If 1, in a reference to another cell. This bit is also 1, so we are pointing to another cell too.
+1. `.store_ref(state_init)` stores a reference to another cell of `state_init`. This makes sense because the first two bits of `11` tell us that we are storing `StateInit` in a reference.
+1. `.store_ref(master_msg)` stores a reference to another cell of `master_msg`. This makes sense because the last bit of `1` tells us that we are storing `^X`, not `X`.
+
+Lastly, `send_raw_message(msg.end_cell(), 1);` sends the message off. The second parameter is `mode`; `1` means paying transfer fees separately from the message value.
+
+## Burn notification
+
+Now that we finally covered `op::mint()`, let's look at `if (op == op::burn_notification()) {...}`:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:499px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-minter.fc%23L72-L91&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+First, we obtain `jetton_amoutn` and `from_address` the same way we do for the mint.
+
+Next, we have `throw_unless`:
+
+```ts
+throw_unless(74,
+    equal_slices(
+      calculate_user_jetton_wallet_address(
+        from_address, 
+        my_address(), 
+        jetton_wallet_code
+      ), 
+      sender_address
+    )
+);
+```
+
+Let's look back at the error code from `JettonConstants`:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fwrappers%2FJettonConstants.ts%23L19&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+74 equals `unauthorized_burn`. So we learn that the code checks if `sender_address` is an authorized address by comparing `sender_address` against the expected wallet address of this particular jetton.
+
+The reason that we compare is that we want to make sure `from_address`, which can be manipulated by the sender, gives the same address when put into `calculate_user_jetton_wallet_address`.
+
+Next, `save_data(total_supply - jetton_amount, admin_address, content, jetton_wallet_code);` is to update the total supply because `total_supply` is decreasing by `jetton_amount`.
+
+Next, we load `response_address` by writing `slice response_address = in_msg_body~load_msg_addr();`.
+
+Recall that a `MsgAddress` can be [`addr_none$00` constructor](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L100). That's why we are checking `if (response_address.preload_uint(2) != 0)`.
+
+Then, we are building a message again. Let's break it down:
+
+```js
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+  src:MsgAddressInt dest:MsgAddressInt 
+  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+  created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+1. `.store_uint(0x10, 6)`. `0x10` in 6 bits = `0b010000`. 
+    1. The leftmost bit is `0`, so we know that it's `int_msg_info$0`. 
+    1. The next bit is `1`, it means `ihr_disabled` is `true`. At the time of writing, hypercube writing is always disabled.  
+    1. Next bit is `0`. Means the message shouldn't be `bounce`d if there are errors during processing.
+    1. Next bit is also `0`. Means the message itself is not a result of bouncing.
+    1. The next two bits are `00`, meaning `src` is `addr_none$00`.
+1. `.store_slice(response_address)` stores `dest:MsgAddressInt`.
+1. `.store_coins(0)` means storing nothing for `grams:Grams` part of `CurrencyCollection`.
+1. `.store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)` stores a zero that is `1 + 4 + 4 + 64 + 32 + 1 + 1 = 107` bits long.
+    1. The first bit denotes storing nothing for `other:ExtraCurrencyCollection` part of `CurrencyCollection` (empty dictionary).
+    1. The next double four bits denote zero `ihr_fee` and `fwd_fee`. These will be overwritten.
+    1. The 64 bits are for `created_lt`, which is overwritten.
+    1. The 32 bits are for `created_at`, which is also overwritten.
+    1. The next 1 bit of zero means there is no `init field; recall the type `init:(Maybe (Either StateInit ^StateInit))`, and zero means there's nothing in `Maybe`.
+    1. The next 1 bit  of zero means the body is directly serialized in the current cell, which follows custom layout.
+1. The rest of the layout follows [the typical structure of internal message body](https://docs.ton.org/develop/smart-contracts/guidelines/internal-messages#internal-message-body), which is to store 32-bit uint `op` and then 64-bit uint `query_id`:
+
+    ```js
+    .store_uint(op::excesses(), 32)
+    .store_uint(query_id, 64);
+    ```
+1. Then the message is sent with a specific mode and flag: `send_raw_message(msg.end_cell(), 2 + 64);`. 2 means "Ignore some errors arising while processing this message during the action phase", and 64 means "Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message". For more, have a look at [the document on message modes](https://docs.ton.org/develop/smart-contracts/messages#message-modes).
+
+And you might be wondering, why is there no code to reduce the balance of the `sender_address`? This is because the burn is already done from [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L163). That is specifically why this operation is called `op::burn_notification()`, because the message comes from [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L163) after it burns its own balance. We will look at how the wallet works in a second.
+
+## Admin operations
+
+The rest of the operations are pretty simple:
+
+```js
+if (op == 3) { ;; change admin
+    throw_unless(
+      73, 
+      equal_slices(sender_address, admin_address)
+    );
+    slice new_admin_address = in_msg_body~load_msg_addr();
+    save_data(
+      total_supply, 
+      new_admin_address, 
+      content, 
+      jetton_wallet_code
+    );
+    return ();
+}
+
+if (op == 4) { ;; change content, delete this for immutable tokens
+    throw_unless(
+      73, 
+      equal_slices(sender_address, admin_address)
+    );
+    save_data(
+      total_supply, 
+      admin_address, 
+      in_msg_body~load_ref(), 
+      jetton_wallet_code
+    );
+    return ();
+}
+```
+
+These are just administrative operations that can only be called by `admin_address`. It will update the persistent storage of the contract accordingly.
+
+The last two functions are [get methods](https://docs.ton.org/develop/smart-contracts/guidelines/get-methods), to be called outside of blockchain:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:268px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-minter.fc%23L109-L117&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+The methods are very self-explanatory. `get_jetton_data` returns the data stored on the persistent storage of the jetton minter (parent) contract. `get_wallet_address` returns the address of user's jetton wallet based on the user's address.
 
 ## References
 
