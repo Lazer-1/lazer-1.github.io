@@ -8,7 +8,7 @@ sort_by = "date"
 katex_enable = true
 +++
 
-## Sharding in TON
+# Sharding in TON
 
 TON employs an unique approach to build the "blockchain of blockchains" by ['sharding' its chains](https://docs.ton.org/develop/blockchain/sharding-lifecycle). The original concept of sharding comes from database design. It is a way to split a big database into smaller, manageable pieces.
 
@@ -27,7 +27,7 @@ In database terms:
 
 When this concept is applied to blockchain, it enables multiple pieces of data to be processed in parallel. This makes blockchain significantly faster and more scalable.
 
-## How sharding affects smart contract design on TON
+# How sharding affects smart contract design on TON
 
 But there's a gotcha with sharding on TON:
 - [A smart contract is only allowed synchronous access to its own local state](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers#3-your-smart-contract). Smart contracts cannot access other contracts' state because accessing the state cannot be synchronous and atomic.
@@ -38,7 +38,7 @@ This is quite a huge change for any developers coming from EVM chains, because t
 
 Now, we will review this concept with a practical example: Jettons.
 
-## Smart contract design of Jettons
+# Smart contract design of Jettons
 
 Jettons are the token standard on TON, just like ERC20 on Ethereum. 
 - The code is open sourced at [`ton-blockchain/token-contract`](https://github.com/ton-blockchain/token-contract/tree/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft). 
@@ -48,6 +48,8 @@ Jettons are the token standard on TON, just like ERC20 on Ethereum.
 The important contracts to look at are:
 - [`jetton-minter.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-minter.fc)
 - [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc)
+
+## jetton-minter
 
 [`jetton-minter.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-minter.fc) is the 'parent' contract, that contains global information about the token, like total supply, name, symbol, and admin address.
 
@@ -59,6 +61,7 @@ The data stored in `jetton-minter.fc` are the following:
 - `total_supply` is the amount of total tokens minted. 
 - `admin_address` is the address of the admin who can control the minter contract.
 - `content` is the cell of data that abides by [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-attributes).
+- `jetton_wallet_code` is [the actual code of `jetton-wallet.fc` contract](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/sandbox_tests/JettonWallet.spec.ts#L36). If someone who doesn't have a wallet yet receives a coin, he will receive the message with `jetton-wallet` code so his wallet can be deployed.
 
 `get_data()` returns the persistent contract storage cell. Remember everything on TON is stored in a cell. Then, `begin_parse` converts `cell` into `slice`. The reason is that all `load_*` methods only work on `slice` type, not `cell`. The data bits and references to other cells from the cell can be obtained by loading them from the `slice`. 
 
@@ -207,7 +210,7 @@ The meaning of `1 + 4 + 4 + 64 + 32 + 1 + 1 + 1` is the following [^1]:
 
 Now, you must be wondering where this particular order of serialization came from. This rule in TON is called TL-B scheme. Let us look into that closely before going any further.
 
-## TL-B schemes
+### TL-B schemes
 
 TL-B stands for Type Language - Binary. It is a language designed to describe the type system, constructors and functions. Even the `message` that we send can be described by TL-B because it has a certain structure: 
 
@@ -281,7 +284,7 @@ It refers to three different custom types:
 
     <iframe frameborder="0" scrolling="no" style="width:100%; height:142px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L144-L146&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
-    `StateInit` serves to delivery inital data to contract and used in contract deployment. The first field is `split_depth`, of type `(## 5)`. `## 5` means a 5-bit integer. For more, have a look at [StateInit TL-B scheme](https://docs.ton.org/develop/data-formats/msg-tlb#stateinit-tl-b). But as of now, `split_depth`, `special` and `library` are unused. `code` is contract's serialized code, and `data` is contract's initial data.
+    `StateInit` serves to delivery inital data to contract and used in contract deployment. The first field is `split_depth`, of type `(# 5)`. `# 5` means a 5-bit integer. For more, have a look at [StateInit TL-B scheme](https://docs.ton.org/develop/data-formats/msg-tlb#stateinit-tl-b). But as of now, `split_depth`, `special` and `library` are unused. `code` is contract's serialized code, and `data` is contract's initial data.
 
 3. `body:(Either X ^X)`
 
@@ -291,7 +294,7 @@ It refers to three different custom types:
 
     If you have been following carefully, you should see that `body:(Either X ^X)` means a type of `X`, or a reference to a cell containing type `X`.
 
-## Message in `mint_tokens`
+### Message in `mint_tokens`
 
 Now, let's go back to the structure of message in `mint_tokens`:
 
@@ -327,7 +330,7 @@ Then:
 
 Lastly, `send_raw_message(msg.end_cell(), 1);` sends the message off. The second parameter is `mode`; `1` means paying transfer fees separately from the message value.
 
-## Burn notification
+### Burn notification
 
 Now that we finally covered `op::mint()`, let's look at `if (op == op::burn_notification()) {...}`:
 
@@ -350,7 +353,7 @@ throw_unless(74,
 );
 ```
 
-Let's look back at the error code from `JettonConstants`:
+Let's look back at the error code from `JettonConstants.ts`:
 
 <iframe frameborder="0" scrolling="no" style="width:100%; height:100px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fwrappers%2FJettonConstants.ts%23L19&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
@@ -398,7 +401,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 
 And you might be wondering, why is there no code to reduce the balance of the `sender_address`? This is because the burn is already done from [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L163). That is specifically why this operation is called `op::burn_notification()`, because the message comes from [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L163) after it burns its own balance. We will look at how the wallet works in a second.
 
-## Admin operations
+### Admin operations
 
 The rest of the operations are pretty simple:
 
@@ -435,13 +438,25 @@ if (op == 4) { ;; change content, delete this for immutable tokens
 
 These are just administrative operations that can only be called by `admin_address`. It will update the persistent storage of the contract accordingly.
 
+### Get methods
+
 The last two functions are [get methods](https://docs.ton.org/develop/smart-contracts/guidelines/get-methods), to be called outside of blockchain:
 
 <iframe frameborder="0" scrolling="no" style="width:100%; height:268px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-minter.fc%23L109-L117&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
 The methods are very self-explanatory. `get_jetton_data` returns the data stored on the persistent storage of the jetton minter (parent) contract. `get_wallet_address` returns the address of user's jetton wallet based on the user's address.
 
-## References
+## jetton-wallet
+
+Now, we have a look at [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L1), which is the 'child' contract of jetton.
+
+Let us start with the TL-B scheme of storage:
+
+<iframe frameborder="0" scrolling="no" style="width:100%; height:163px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L24-L27&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
+
+The storage contains `balance`, `owner_addrses`, `jetton_master_address`, and `jetton_wallet_code`. Should be self-explanatory.
+
+# References
 
 [^1]: [[TON docs] Message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout)
 
@@ -452,3 +467,5 @@ The methods are very self-explanatory. `get_jetton_data` returns the data stored
 - [[Youtube] Technical Demo: Sharded Smart Contract Architecture for Smart Contract Developers](https://youtu.be/svOadLWwYaM)
 - [TVM Whitepaper](https://docs.everscale.network/tvm.pdf)
 - [[Github] `block.tlb`](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L381)
+- [[Github] `jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
+- [[Github] `jetton-minter.fc`](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc)
