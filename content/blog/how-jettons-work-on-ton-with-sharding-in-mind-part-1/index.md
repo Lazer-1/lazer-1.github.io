@@ -1,5 +1,5 @@
 +++
-title = "How Jettons work on TON with sharding in mind"
+title = "How Jettons work on TON with sharding in mind (Part 1)"
 date = 2024-07-01
 authors = ["9oelm"]
 sort_by = "date"
@@ -446,16 +446,6 @@ The last two functions are [get methods](https://docs.ton.org/develop/smart-cont
 
 The methods are very self-explanatory. `get_jetton_data` returns the data stored on the persistent storage of the jetton minter (parent) contract. `get_wallet_address` returns the address of user's jetton wallet based on the user's address.
 
-## jetton-wallet
-
-Now, we have a look at [`jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L1), which is the 'child' contract of jetton.
-
-Let us start with the TL-B scheme of storage:
-
-<iframe frameborder="0" scrolling="no" style="width:100%; height:163px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L24-L27&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
-
-The storage contains `balance`, `owner_addrses`, `jetton_master_address`, and `jetton_wallet_code`. Should be self-explanatory.
-
 # References
 
 [^1]: [[TON docs] Message layout](https://docs.ton.org/develop/smart-contracts/messages#message-layout)
@@ -464,8 +454,8 @@ The storage contains `balance`, `owner_addrses`, `jetton_master_address`, and `j
 - [[TON Blog] Six unique aspects of TON Blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
 - [[Excalidraw] Contracts design diagram](https://excalidraw.com/#json=G8O---P5YSw45M_Fv9rzW,zU2SGCurOzwfre59EImQtQ)
 - [[Github] awesome-ton-smart-contracts](https://github.com/dkeysil/awesome-ton-smart-contracts)
-- [[Youtube] Technical Demo: Sharded Smart Contract Architecture for Smart Contract Developers](https://youtu.be/svOadLWwYaM)
-- [TVM Whitepaper](https://docs.everscale.network/tvm.pdf)
 - [[Github] `block.tlb`](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L381)
 - [[Github] `jetton-wallet.fc`](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
 - [[Github] `jetton-minter.fc`](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc)
+- [[Youtube] Technical Demo: Sharded Smart Contract Architecture for Smart Contract Developers](https://youtu.be/svOadLWwYaM)
+- [[PDF] TVM Whitepaper](https://docs.everscale.network/tvm.pdf)
