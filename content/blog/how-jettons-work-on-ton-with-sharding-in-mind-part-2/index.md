@@ -58,7 +58,7 @@ if (flags & 1) {
 1. `in_msg_body~skip_bits(32); ;; 0xFFFFFFFF`: we do this because [the body of the bounced message will contain 32 bit `0xffffffff` followed by 256 bit from original message](https://docs.ton.org/develop/smart-contracts/guidelines/non-bouncable-messages).
 2. we load the data with `load_data()`.
 3. the original `op` is retrieved by `int op = in_msg_body~load_uint(32);`. Recall that the structure of the message body is 32 bits of operation followed by 64 bits of query id.
-4. `throw_unless(709, (op == op::internal_transfer()) | (op == op::burn_notification()));` throws if the bounced operation isn't internal transfer or burn notification. The error code is `not_enough_ton = 709`.
+4. `throw_unless(709, (op == op::internal_transfer()) | (op == op::burn_notification()));` throws if the bounced operation isn't internal transfer or burn notification. The error code is `static invalid_op = 709`.
 5. `int query_id = in_msg_body~load_uint(64);` is loaded to get past the 64 bits.
 6. `int jetton_amount = in_msg_body~load_coins();` loads the amount that was sent in the message body.
 7. The amount is credited again back to balance and written to the storage. This prevents failed messages from falsely deducting the balance. 
@@ -85,7 +85,14 @@ Now when the opcode is `op::transfer`, we call `send_tokens`:
 
 <iframe frameborder="0" scrolling="no" style="width:100%; height:1108px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L50-L98&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
-Let's break it down:
+Let's break it down.
+
+1. Note the TL-B schemes above `send_tokens` declaration:
+
+    `transfer` constructor is the message coming from the user's master wallet into this jetton wallet.
+    `internal_transfer` constructor is the message going out of this jetton wallet.
+
+    <iframe frameborder="0" scrolling="no" style="width:100%; height:268px;" allow="clipboard-write" src="https://emgithub.com/iframe.html?target=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L39-L47&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></iframe>
 
 1. `int query_id = in_msg_body~load_uint(64);`. Remember we already loaded the opcode, so the next up is 64-bits  long `query_id`.
 1. The rest of `in_msg_body` is customizable. We can find the rest of the body at `wrappers/JettonWallet.ts`:
@@ -138,6 +145,11 @@ Let's break it down:
     1. `store_uint(4, 3)`. It stores `0b100`. The first `0b10` is for `addr_std$10` prefix. The next `0` is for `Maybe`, to say that there is none.
     1. `.store_int(workchain(), 8)`. Store a 8-bit long workchain id, which is `0b00000000`. The workchain id is a signed 32-bit integer, but addr_std dictates that `workchain_id` needs to be `int8` in this specific type.
     1. [`cell_hash`](https://docs.ton.org/develop/func/stdlib#cell_hash) returns 256-bit uint hash of a cell. `state_init` is composed of `jetton_wallet_code`, `owner_address`, and `jetton_master_address`, so every jetton wallet address is practically unique, because if it were a different jetton, owner, or a jetton creator, the hash would be different. This is `address:bits256`.
+1. `slice response_address = in_msg_body~load_msg_addr();` This is `response_destination:MsgAddress` of `transfer` constructor.
+1. `cell custom_payload = in_msg_body~load_dict();` is `custom_payload:(Maybe ^Cell)` of `transfer` constructor. We use [`load_dict()`](https://docs.ton.org/develop/func/stdlib#load_dict) here to load `Maybe ^Cell`, because it can be used for values of arbitrary `Maybe ^Y` types or a dictionary.
+1. `int forward_ton_amount = in_msg_body~load_coins();` is loading `forward_ton_amount:(VarUInteger 16)`. Note that `VarUInteger 16` means $128 - 8 = 120$ bits of uint.
+1. `throw_unless(708, slice_bits(in_msg_body) >= 1);`. `slice_bits(in_msg_body)` will check if there is any remaining data if `slice_bits(in_msg_body) >= 1` is not true. This can happen in case of a malformed forward payload. For example, if `forward_payload:(Either Cell ^Cell)` is not included in `in_msg_body` at all, this would throw because `slice_bits(in_msg_body) == 0`.
+1. Now that we checked that there's a remaining part of the message, we safely call `slice either_forward_payload = in_msg_body;`.
 
 # References
 
