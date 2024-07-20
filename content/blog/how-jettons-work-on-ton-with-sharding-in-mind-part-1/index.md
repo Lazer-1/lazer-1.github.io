@@ -10,7 +10,7 @@ katex_enable = true
 
 # Sharding in TON
 
-TON employs an unique approach to build the "blockchain of blockchains" by ['sharding' its chains](https://docs.ton.org/develop/blockchain/sharding-lifecycle). The original concept of sharding comes from database design. It is a way to split a big database into smaller, manageable pieces.
+TON employs a unique approach to build the "blockchain of blockchains" by ['sharding' its chains](https://docs.ton.org/develop/blockchain/sharding-lifecycle). The original concept of sharding comes from database design. It is a way to split a big database into smaller, manageable pieces.
 
 For example: imagine you have a huge book of contacts. It's so big that it's hard to find anything quickly. Sharding is like dividing that book into smaller address books based on last names:
 - Book A-G
