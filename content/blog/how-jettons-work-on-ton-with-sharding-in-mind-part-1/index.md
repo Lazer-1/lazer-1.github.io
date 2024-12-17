@@ -114,7 +114,7 @@ If you don't need some of the parameters, you can use the function signature wit
 
 The first line of the function starts with [`slice_empty?()`](https://docs.ton.org/develop/func/cookbook#how-to-determine-if-slice-is-empty).
 
-This returns true if there is at least one bit of data or one ref (if you want to check if slice only has data and NOT refs, use `slice_data_empty`).
+This returns false if there is at least one bit of data or one ref (if you want to check if slice only has data and NOT refs, use `slice_data_empty`).
 
 Because we don't want to process empty message body, we immediately return.
 
