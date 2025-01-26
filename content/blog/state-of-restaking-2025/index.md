@@ -59,6 +59,19 @@ Therefore, while liquidity pools could certainly be used as an option for yield,
 
 Since LSTs won't hardly give satisfactory, risk-safe yields, people ran to EigenLayer and started depositing their idle staked ETH.
 
+![eigenlayer-tvl.png](./eigenlayer-tvl.png)
+
+It only took a year for them to reach 1B in TVL! And now it's sitting at 14.3B. This definitely tells something about the idleness of staked tokens.
+
+[EigenLayer only launched their mainnet on Apr 9, 2024](https://www.blog.eigenlayer.xyz/mainnet-launch-eigenlayer-eigenda/). This is almost a year away from [June 2023 when they first launched their stage 1, where hardly any core features of a restaking protocol were built](https://www.blog.eigenlayer.xyz/eigenlayer-stage-1-mainnet-launch/). It was just a bare-metal deposit and withdrawal system without yields. But still, people ran and deposited, mainly in expectation for airdrop points. Increasing number of depositors led to even higher TVL, which in turn resulted in even higher expectation for project token price, which in turn brought in even more depositors who shared the same expectation.
+
+Other protocols saw a similar trend. To name a few, Symbiotic, Karak, Babylon, Solayer and alike. They all saw a great increase in TVL, which is incomparable to other DeFi protocols, which are usually in the unit of few tens or hundreds of millions only. Today, these are some of the top DeFi protocols by TVL in the world.
+
+![symbiotic-tvl.png](./symbiotic-tvl.png)
+![karak-tvl.png](./karak-tvl.png)
+![babylon.png](./babylon.png)
+![solayer-tvl.png](./solayer-tvl.png)
+
 ## Ethereum
 
 ### EigenLayer
@@ -84,7 +97,6 @@ Multi-token restaking
 How the blockchain of Bitcoin is not run on PoS, but still can be restaked.
 
 ### Babylon
-
 
 ### Pell network
 
