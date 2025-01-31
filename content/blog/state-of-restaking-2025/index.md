@@ -1,5 +1,5 @@
 +++
-title = "State of restaking: 2025"
+title = "Crash course on the state of restaking: 2025"
 date = 2025-01-25T00:00:00Z
 authors = ["9oelm"]
 sort_by = "date"
@@ -8,21 +8,17 @@ sort_by = "date"
 katex_enable = true
 +++
 
-# Review of restaking
-
-# Restaking in hindsight: 2024
-
 ## Why do people restake anyways?
 
 ### Low utility of LSTs
 
 As we explored before at [Making sense of liquid staking](https://research.lazer1.xyz/blog/making-sense-of-liquid-restaking/), LSTs are tokens that represent the user's staking position, free to be transferred over for any purposes.
 
-Still now in the DeFi landscape, there is not so much utility with LSTs. Historically speaking, the deposit interest rate is surprisingly low compared to other unstaked versions of tokens. Let's take an example of wstETH on Aave over the past 365 days.
+Still now in the DeFi landscape, there is not so much utility with LSTs. Historically speaking, the deposit interest rate is surprisingly low compared to other unstaked versions of tokens. Let's take an [example of wstETH on Aave over the past 365 days](https://aavescan.com/ethereum-v3/0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca00x2f39d218133afab8f2b819b1066c7e434ad94e9e).
 
 ![borrow-rate-wsteth-ethereum-v3-aave.png](./borrow-rate-wsteth-ethereum-v3-aave.png)
 
-The formula of any autonomous yield-bearing system is simple: there needs to be a demand for the token. In the case of wstETH on Aave v3, there need to be people who are willing to borrow wstETH. However, there aren't just enough people who want to do it. Just let that sink that in for a second - why would you ever want to borrow wstETH instead of WETH anyways? Where are you going to use it?
+The formula of any autonomous yield-bearing system is simple: there needs to be a demand for the token to generate a yield. In the case of wstETH on Aave v3, there need to be people who are willing to borrow wstETH. However, there aren't just enough people who want to do it. Just let that sink that in for a second - why would you ever want to borrow wstETH instead of WETH anyways? Where are you going to use it?
 
 ![borrow-rate-usdc-ethereum-v3-aave.png](./borrow-rate-usdc-ethereum-v3-aave.png)
 
@@ -33,7 +29,7 @@ This is a general pattern over any other staked asset across the network:
 ![ethereum-v3-aave.png](./ethereum-v3-aave.png)
 ![arbitrum-v3-aave.png](./arbitrum-v3-aave.png)
 
-You can see that they are in a very low range of deposit and borrrow interest rates, typically ranging below 1%. This means there's not a big demand for these assets.
+You can see that they are in a very low range of deposit and borrrow interest rates, typically ranging from 0% to 1%. This means there's not a big demand for these assets.
 
 In comparison, observe that normally, other mainstream, unstaked assets would give tasty yields:
 
@@ -72,11 +68,57 @@ Other protocols saw a similar trend. To name a few, Symbiotic, Karak, Babylon, S
 ![babylon.png](./babylon.png)
 ![solayer-tvl.png](./solayer-tvl.png)
 
+# Restaking landscape
+
+In this section, we review how different restaking protocols have been evolving across different chains. The biggest premise of a restaking protocol is that it needs to support a major asset that has a market cap that is large enough to share an economic security. For this reason, the restaking protocols have been mainly developed on Bitcoin, Ethereum, and Solana.
+
 ## Ethereum
 
 ### EigenLayer
 
-Sharing the security of an existing network, namely Ethereum mainnet with no additional cost of having to launch a project token.
+Since its birth in 2023, EigenLayer's goal has been to sharing the security of an existing network, namely Ethereum mainnet. It provides decentralized systems with no additional cost of having to launch a project token. EigenLayer is the first restaking protocol ever to be created. Now in 2025, EigenLayer supports depositing more ERC20 tokens. However, Ethereum remains as the most dominant asset that is deposited:
+
+_Restaked token distribution on Defillama as of Jan 31, 2025_
+
+![eigenlayer-defillama-2025-01-31.png](./eigenlayer-defillama-2025-01-31.png)
+
+_Restaked token distribution on EigenLayer App as of Jan 31, 2025_
+
+![eigenlayer-2025-01-31.png](./eigenlayer-2025-01-31.png)
+
+Approximately, more than 95% of the restaked tokens account for staked ETH variants and $EIGEN token. This is an interesting point, because Eigenlayer clearly supports more ERC20 tokens, like below:
+
+![eigenlayer-supported-tokens-others.png](./eigenlayer-supported-tokens-others.png)
+
+This may suggest that a restaking protocol's positioning strategy is important, as it is a signal that most users still tend to bring in Ethereum instead of other ERC20s.
+
+#### How EigenLayer works
+
+There are a few terms to be defined in EigenLayer's architecture, which are also shared by other prominent protocols:
+
+**Restakers**: people who stake again their staked token to EigenLayer. This term has been diluted a little bit, as people also 'restake' plain, unstaked ERC20 tokens as well as ETH too. But we will keep calling it restaking and restakers to refer to the activity of delegating tokens of value to provide security for decentralized services.
+
+**Slashing**: 
+
+**Actively Validated Services (AVSs henceforth)**:
+
+**Operators**: they run AVS and [TODO]. Restakers choose to delegate their tokens to specific operators. There are many operators on EigenLayer today. The primary reason for being an operator is an economic incentives in expectation for rewards for their operating jobs.
+
+_Restakers choose to delegate their tokens to specific operators._
+
+![eigenlayer-select-operator.png](./eigenlayer-select-operator.png)
+
+_A list of operators on EigenLayer._
+
+![eigenlayer-operators.png](./eigenlayer-operators.png)
+
+As we will cover more later on, different operators will servce different risk appetites. In a sense, operators act like different vaults that are exposed to different levels of risks. For example, Operator A may serve AVSs that are prone to more slashing, resulting in higher rewards APR but higher chance of slashing (loss). In contrast, Operator B may serve AVSs that are more stable and less risky. These AVSs will tend to be less sophisticated and to run simpler tasks, resulting in smaller rewards APR and lower chance of slashing. 
+
+Practically speaking, let's say Operator A delegates its restaked tokens to a bridge. Operator B delegates its restaked tokens to a decentralized system that calculates the sum of a two different numbers. It becomes pretty obvious that the chances of slashing is higher on the former case, and lower on the latter. The same goes for the rewards; Operator A would yield more rewards for its restakers, and B much less for its restakers.
+
+For this reason, there remains a problem of finding an appropriate level of risk exposure to different AVS categories, because there are many operators, and EigenLayer does not offer a specific interface for comparing risks across different operators and AVSs. If you are interested in this problem, you might want to look into what [YieldNest](https://docs.yieldnest.finance/introduction/why-yieldnest) is doing: optimizing yield for the users by providing offers users controlled, liquid, and risk-adjusted exposure to curated AVS categories.
+
+#### Eigen token
 
 ### Symbiotic
 
@@ -110,3 +152,4 @@ Revenues come from AVS. But AVS should make enough money and pay it to feed all 
 
 - [[Four Pillars] Restaking Stack: Categorizing the Restaking Ecosystem](https://4pillars.io/en/articles/restaking-stack-restaking-series-1)
 - [[Gauntlet] Inside the Restaking Ecosystem: Restaking Protocols](https://www.gauntlet.xyz/resources/inside-the-restaking-ecosystem-restaking-protocols)
+- [[EigenLayer] Overview](https://docs.eigenlayer.xyz/eigenlayer/overview)
