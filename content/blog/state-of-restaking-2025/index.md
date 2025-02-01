@@ -140,17 +140,23 @@ However, it is possible to get a liquid restaking token on other liquid staking 
 
 Symbiotic has the same goal as EigenLayer: a marketplace for a pooled economic security. Networks will come to Symbiotic to borrow security, and restakers will supply that.
 
+_Symbiotic's core participants._
+
+![symbiotic-core-diagram.png](./symbiotic-core-diagram.png)
+
 There are a few differences from EigenLayer:
 
-**Collateral**. From its inception, Symbiotic has supported a wide range of ERC20 tokens. This led to more diverse ERC20 tokens other than ETH derivatives being restaked on Symbiotic than EigenLayer, although ETH derivatives account for the most TVL. For example, it has an lvlwaUSDC vault, USDC derivative on [level.money](https://level.money).
+**Collateral**. From its inception, Symbiotic has supported a wide range of ERC20 tokens. This led to more diverse ERC20 tokens other than ETH derivatives being restaked on Symbiotic than EigenLayer, although ETH derivatives account for the most TVL. For example, it has an [lvlwaUSDC vault](https://app.symbiotic.box/vault/0x67F91a36c5287709E68E3420cd17dd5B13c60D6d), USDC derivative on [level.money](https://level.money).
 
 ![symbiotic-tokens-breakdown.png](./symbiotic-tokens-breakdown.png)
 
-**Networks**. This is what analogous what an AVS is on EigenLayer.
+**Networks**. This is what analogous what an AVS is on EigenLayer. It is any "systems that need economic security to operate safely. These can be Layer 1 blockchains, Layer 2 solutions, or other decentralized systems that require **stake-based security guarantees**."
 
 **Vaults.** There is no such thing as vaults on EigenLayer. Instead, EigenLayer leaves that responsibility to the external developers. If one wanted, someone could create something like [YieldNest](https://docs.yieldnest.finance/introduction/why-yieldnest), but this would be outside of the core EigenLayer protocol.
 
 However, on Symbiotic, vaults are natively built into the protocol. Vaults are just like the traditional vaults in DeFi; different vaults have their own strategies to delegate the stake to operators and thus networks.
+
+![symbiotic-vaults.png](./symbiotic-vaults.png)
 
 _[An example vault on Symbiotic that restakes wstETH, curated ER7 capital](https://app.symbiotic.fi/vault/0x7b276aAD6D2ebfD7e270C5a2697ac79182D9550E)._
 
@@ -160,8 +166,9 @@ _[Detailed information about the same vault, but more information on Mellow Fina
 
 ![symbiotic-vault-example-p2p.png](./symbiotic-vault-example-p2p.png)
 
-**Operators.**
+**Operators.** They are similar to what they are on EigenLayer. They are entities that operate validators, nodes, or any software for the network infrastructure. They are backed by restaked tokens in the vaults, and work on the operation of the networks.
 
+![symbiotic-operators.png](./symbiotic-operators.png)
 
 ### Karak
 
@@ -194,3 +201,5 @@ Revenues come from AVS. But AVS should make enough money and pay it to feed all 
 - [[EigenLayer] Overview](https://docs.eigenlayer.xyz/eigenlayer/overview)
 - [[EigenLayer] Whitepaper](https://docs.eigenlayer.xyz/assets/files/EigenLayer_WhitePaper-88c47923ca0319870c611decd6e562ad.pdf)
 - [[EigenLayer] Eigen token Whitepaper](https://docs.eigenlayer.xyz/assets/files/EIGEN_Token_Whitepaper-0df8e17b7efa052fd2a22e1ade9c6f69.pdf)
+- [[Symbiotic] Symbiotic docs](https://docs.symbiotic.fi/)
+- [[BlockSec] Can Symbiotic Challenge EigenLayer in Restaking? Symbiotic VS. EigenLayer: A Comparative Analysis](https://blocksec.com/blog/eigenlayer-competitor-symbiotic)
