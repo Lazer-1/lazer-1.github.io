@@ -94,15 +94,23 @@ This may suggest that a restaking protocol's positioning strategy is important, 
 
 #### How EigenLayer works
 
-There are a few terms to be defined in EigenLayer's architecture, which are also shared by other prominent protocols:
+These are the few most important concepts in EigenLayer's architecture, which are also shared by other prominent protocols. Let's go into detail:
 
-**Restakers**: people who stake again their staked token to EigenLayer. This term has been diluted a little bit, as people also 'restake' plain, unstaked ERC20 tokens as well as ETH too. But we will keep calling it restaking and restakers to refer to the activity of delegating tokens of value to provide security for decentralized services.
+**Restakers**. people who stake again their staked token to EigenLayer. This term has been diluted a little bit, as people also 'restake' plain, unstaked ERC20 tokens as well as ETH too. But we will keep calling it restaking and restakers to refer to the activity of delegating tokens of value to provide security for decentralized services.
 
-**Slashing**: 
+**Actively Validated Services (AVSs henceforth)**. decentralized service that has unique off-chain logics that are validated by on-chain contracts. The categories of AVS are seen below:
 
-**Actively Validated Services (AVSs henceforth)**:
+![avs-categories.png](./avs-categories.png)
 
-**Operators**: they run AVS and [TODO]. Restakers choose to delegate their tokens to specific operators. There are many operators on EigenLayer today. The primary reason for being an operator is an economic incentives in expectation for rewards for their operating jobs.
+A practical example of an AVS is [EigenDA](https://docs.eigenda.xyz/). It is an AVS developed by EigenLayer, which specifically takes care of data availability problems for modern rollups on Ethereum. Another example is [Hyperlane](https://app.eigenlayer.xyz/avs/0xe8e59c6c8b56f2c178f63bcfc4ce5e5e2359c8fc), which is an interoperability protocol.
+
+Every AVS is an on-chain contract for validation and an off-chain network of operators. 
+
+**Slashing**. Before EigenLayer, it used to mean penalizing dishonest or dysfunctional validators in a PoS network like Ethereum. Now, in EigenLayer, slashing refers to penalizing operators who secured an AVS that could not complete a task correctly by burning the restaked tokens.
+
+**Operators**. They run AVS and send the evidence of the execution on-chain to confirm the work. Restakers choose to delegate their tokens to specific operators. There are many operators on EigenLayer today. The primary reason for being an operator is an economic incentives in expectation for rewards for their operating jobs. By default, Operators will earn a flat 10% split on rewards. The rest of the reward is claimable by the operator's delegated stakers.
+
+It's worth noting that the operators cannot directly transfer the delegated tokens, but they relate them to AVSs for slashing, so that when real slashing happens, the delegated tokens will be burnt. [TODO]
 
 _Restakers choose to delegate their tokens to specific operators._
 
@@ -112,11 +120,17 @@ _A list of operators on EigenLayer._
 
 ![eigenlayer-operators.png](./eigenlayer-operators.png)
 
-As we will cover more later on, different operators will servce different risk appetites. In a sense, operators act like different vaults that are exposed to different levels of risks. For example, Operator A may serve AVSs that are prone to more slashing, resulting in higher rewards APR but higher chance of slashing (loss). In contrast, Operator B may serve AVSs that are more stable and less risky. These AVSs will tend to be less sophisticated and to run simpler tasks, resulting in smaller rewards APR and lower chance of slashing. 
+**Free-market governance**. As we will cover more later on, different operators will servce different risk appetites. In a sense, operators act like different vaults that are exposed to different levels of risks. For example, Operator A may serve AVSs that are prone to more slashing, resulting in higher rewards APR but higher chance of slashing (loss). In contrast, Operator B may serve AVSs that are more stable and less risky. These AVSs will tend to be less sophisticated and to run simpler tasks, resulting in smaller rewards APR and lower chance of slashing. 
 
 Practically speaking, let's say Operator A delegates its restaked tokens to a bridge. Operator B delegates its restaked tokens to a decentralized system that calculates the sum of a two different numbers. It becomes pretty obvious that the chances of slashing is higher on the former case, and lower on the latter. The same goes for the rewards; Operator A would yield more rewards for its restakers, and B much less for its restakers.
 
 For this reason, there remains a problem of finding an appropriate level of risk exposure to different AVS categories, because there are many operators, and EigenLayer does not offer a specific interface for comparing risks across different operators and AVSs. If you are interested in this problem, you might want to look into what [YieldNest](https://docs.yieldnest.finance/introduction/why-yieldnest) is doing: optimizing yield for the users by providing offers users controlled, liquid, and risk-adjusted exposure to curated AVS categories.
+
+#### No native fungible token on EigenLayer
+
+Additionally, EigenLayer does not mint a token representing the restaking position upon restaking (e.g., rstETH). This should be pretty clear if you have been following. The reason is that the risk exposure across different operators is different, so there can never be the 'same' restaked ETH.
+
+However, it is possible to get a liquid restaking token on other liquid staking platforms like Ether.fi, where Ether.fi itself will be an operator on EigenLayer, managing a set of AVSs. On [Ether.fi, the restaking position delegated to its operator is represented as eETH](https://etherfi.gitbook.io/etherfi/getting-started/faq). This is possible because there is only one type of risk exposure based on what AVSs Ether.fi operates. Holding this token will earn you staking AND restaking APR, as well as points across different DApps like EigenLayer.
 
 #### Eigen token
 
@@ -153,3 +167,5 @@ Revenues come from AVS. But AVS should make enough money and pay it to feed all 
 - [[Four Pillars] Restaking Stack: Categorizing the Restaking Ecosystem](https://4pillars.io/en/articles/restaking-stack-restaking-series-1)
 - [[Gauntlet] Inside the Restaking Ecosystem: Restaking Protocols](https://www.gauntlet.xyz/resources/inside-the-restaking-ecosystem-restaking-protocols)
 - [[EigenLayer] Overview](https://docs.eigenlayer.xyz/eigenlayer/overview)
+- [[EigenLayer] Whitepaper](https://docs.eigenlayer.xyz/assets/files/EigenLayer_WhitePaper-88c47923ca0319870c611decd6e562ad.pdf)
+- [[EigenLayer] Eigen token Whitepaper](https://docs.eigenlayer.xyz/assets/files/EIGEN_Token_Whitepaper-0df8e17b7efa052fd2a22e1ade9c6f69.pdf)
