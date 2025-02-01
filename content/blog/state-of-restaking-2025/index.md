@@ -104,7 +104,7 @@ These are the few most important concepts in EigenLayer's architecture, which ar
 
 A practical example of an AVS is [EigenDA](https://docs.eigenda.xyz/). It is an AVS developed by EigenLayer, which specifically takes care of data availability problems for modern rollups on Ethereum. Another example is [Hyperlane](https://app.eigenlayer.xyz/avs/0xe8e59c6c8b56f2c178f63bcfc4ce5e5e2359c8fc), which is an interoperability protocol.
 
-Every AVS is an on-chain contract for validation and an off-chain network of operators. 
+Every AVS is an on-chain contract for validation and an off-chain network of operators. [TODO]
 
 **Slashing**. Before EigenLayer, it used to mean penalizing dishonest or dysfunctional validators in a PoS network like Ethereum. Now, in EigenLayer, slashing refers to penalizing operators who secured an AVS that could not complete a task correctly by burning the restaked tokens.
 
@@ -134,9 +134,34 @@ However, it is possible to get a liquid restaking token on other liquid staking 
 
 #### Eigen token
 
+[TODO]
+
 ### Symbiotic
 
-Multi-token restaking
+Symbiotic has the same goal as EigenLayer: a marketplace for a pooled economic security. Networks will come to Symbiotic to borrow security, and restakers will supply that.
+
+There are a few differences from EigenLayer:
+
+**Collateral**. From its inception, Symbiotic has supported a wide range of ERC20 tokens. This led to more diverse ERC20 tokens other than ETH derivatives being restaked on Symbiotic than EigenLayer, although ETH derivatives account for the most TVL. For example, it has an lvlwaUSDC vault, USDC derivative on [level.money](https://level.money).
+
+![symbiotic-tokens-breakdown.png](./symbiotic-tokens-breakdown.png)
+
+**Networks**. This is what analogous what an AVS is on EigenLayer.
+
+**Vaults.** There is no such thing as vaults on EigenLayer. Instead, EigenLayer leaves that responsibility to the external developers. If one wanted, someone could create something like [YieldNest](https://docs.yieldnest.finance/introduction/why-yieldnest), but this would be outside of the core EigenLayer protocol.
+
+However, on Symbiotic, vaults are natively built into the protocol. Vaults are just like the traditional vaults in DeFi; different vaults have their own strategies to delegate the stake to operators and thus networks.
+
+_[An example vault on Symbiotic that restakes wstETH, curated ER7 capital](https://app.symbiotic.fi/vault/0x7b276aAD6D2ebfD7e270C5a2697ac79182D9550E)._
+
+![symbiotic-vault-example.png](./symbiotic-vault-example.png)
+
+_[Detailed information about the same vault, but more information on Mellow Finance](https://app.mellow.finance/partners/p2p/vaults/ethereum-rsteth)._
+
+![symbiotic-vault-example-p2p.png](./symbiotic-vault-example-p2p.png)
+
+**Operators.**
+
 
 ### Karak
 
