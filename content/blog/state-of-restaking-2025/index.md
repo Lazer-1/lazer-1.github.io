@@ -8,6 +8,16 @@ sort_by = "date"
 katex_enable = true
 +++
 
+## Problems in existing PoS networks
+
+1. **Bootstrapping and attracting capital into a PoS network is difficult**, especially for smaller chains. 
+
+> For example, in the Cosmos ecosystem, consisting of over 60 application specific chains, initial annualized inflation rates of 20% to 100% are quite common. Such high inflation hampers the long term growth of the chain. [^1]
+
+1. **Volatility**. The cost of corruption for an attacker fluctuates based on the staked token's underlying price.
+
+1. **Centralization.** The assets of many PoS chains are concentrated in the hands of early investors, founders and team members and foundations, at least in the early stage of the projects. A concentrated asset exposes the network to centralization when the asset is staked to validate the network. [^2] For example, approximately 91% of Toncoin tokens are concentrated in a few wallets, leading to concerns over centralization. While such high concentrations often suggest strong backing from major investors or early adopters, they also carry risks such as potential market manipulation or volatility. If large amounts of TON tokens are moved or sold by these holders, it could lead to significant price swings that may harm market stability. [^3]
+
 ## Why do people restake anyways?
 
 ### Low utility of LSTs
@@ -172,13 +182,38 @@ _[Detailed information about the same vault, but more information on Mellow Fina
 
 ### Karak
 
+_[Karak](https://karak.network/) is heavily underdocumented. Skipping for now._
+
 ## Solana
 
 ### Solayer
 
+**Approach.** Solana is takes an interesting approach that is different than its counterparts on Ethereum. Its major focus is "the hardware accelerated SVM blockchain" as it is on their homepage.
+
+Their direction is fundamentally different from EigenLayer and alike in the sense that they do aim to generate revenue as a protocol themselves by leveraging state-of-the-art tech. The revenue does not come from the restaking part; it comes from their own superior tech that enables:
+
+1. Increase probability of securing block space
+2. Prioritized transaction inclusion
+
+Solayer team decided to tackle two of these problems. And note that this was only possible because Solana, being a very popular blockchain, is a battlefield for the users to compete for block space and transaction priority. So the problems that they are solving becomes increasingly valuable in the context of Solana.
+
+For this reason, Solayer’s initial emphasis is on enhancing the capabilities of native Solana dApps, which they call "Endogenous AVS", meaning, AVS on Solana only. This is in contrast to EigenLayer or Symbiotic which serve what's called "Exogenous AVS", meaning any decentralized services that require stake-based validation mechanisms not necessarily related to a specific blockchain, such as oracles or bridges.
+
+**Why was this approach possible?** This is because Solayer's team was so technically talented that they could write a hardware-accelerated, superfast SVM L1 blockchain from scratch. Personally speaking, I feel like this is the best approach amongst all restaking protocols, because there are still concerns as to if AVSs on EigenLayer or Symbiotic will generate enough revenue to return a satisfible return to all restakers. For the AVSs to be used, there needs to be enough demand. But that's up to the AVSs themselves to figure out. Then after all, restakers might not be able to get a sustainable yield on EigenLayer.
+
+Recognizing this problem, Solayer decided to leverage their tech talents to develop a protocol-native yield solution, which was to build a technically superior SVM that can be paid to be used by AVSs.
+
+**Architecture**. The general architecture remains the same as EigenLayer and other prominent restaking protocols.
+
 ### Picasso
 
+_[Picasso](https://www.picasso.network/) is skipped for now._
+
 ### Jito
+
+**Node Consensus Networks**. This is what an AVS is on EigenLayer.
+
+**VRT**. Liquid restaking token in Jito restaking vaults.
 
 ## Bitcoin
 
@@ -186,15 +221,48 @@ How the blockchain of Bitcoin is not run on PoS, but still can be restaked.
 
 ### Babylon
 
+**Big idea.** It is a Bitcoin staking started with this problem:
+
+> Bitcoin is a Proof-of-Work chain but it is also a $600 Billion asset and most of it is idle capital.
+
+And the idea is very simple:
+
+>  We propose the concept of Bitcoin staking which allows bitcoin holders to stake their idle bitcoins to increase the security of PoS chains and in the process earn yield.
+
+**Rationale.** Bitcoin, being a PoW chain, has the following differences from PoS assets:
+
+1. Unused. The token of Bitcoin is not being used to secure the chain.
+2. Idle. Most Bitcoins need to be bridged over to other chains to generate yields. But there are risks and hassles to it. So most Bitcoins sit idle.
+3. More decentralized. A common problem in PoS networks is that it is hard to evenly distribute the token amongst the network participants and users. Usually, the early movers will have the most tokens and thus the most stake. Concentration exposes the network to centralization risks. Bitcoin is fair and decentralized, although arguably inefficient.
+4. Less volatile. Volatility poses a risk to PoS networks in case of a significant price drop because the cost of corruption for an attacker would drop too.
+
+**PoS Market.** Babylon proposes a simple marketplace where BTC holders stake their BTC to PoS chains in need of economic security:
+
+![babylon-marketplace.png](./babylon-marketplace.png)
+
+This is similar to EigenLayer where AVSs in need to economic security would bargin their rewards in exchange for restaked assets.
+
+**Architecture**.
+
+![babylon-architecture.png](./babylon-architecture.png)
+
+There are many things in the diagram, but it will suffice to understand that Babylon blockchain will be running to facilitate BTC staking, and its node will communicate through IBC Relayer for other chains to consume the restaked tokens.
+
+It's important to note that in fact the restaked tokens do not get bridged over to the actual chains. When slashing happens, the restaked tokens on Bitcoin will be directly slashed.
+
 ### Pell network
 
 # Current problems
 
-## Revenue model
+## Demand for restaked tokens, revenue model, and product-market fit
 
-Revenues come from AVS. But AVS should make enough money and pay it to feed all restakers.
+Revenues come from AVS and chains. But AVS should make enough money and pay it to feed all restakers.
 
 # References
+
+[^1]: https://docs.babylonlabs.io/papers/btc_staking_litepaper.pdf
+[^2]: https://docs.babylonlabs.io/papers/btc_staking_litepaper.pdf
+[^3]: https://thecurrencyanalytics.com/altcoins/toncoin-price-rally-and-centralization-concerns-156100
 
 - [[Four Pillars] Restaking Stack: Categorizing the Restaking Ecosystem](https://4pillars.io/en/articles/restaking-stack-restaking-series-1)
 - [[Gauntlet] Inside the Restaking Ecosystem: Restaking Protocols](https://www.gauntlet.xyz/resources/inside-the-restaking-ecosystem-restaking-protocols)
@@ -203,3 +271,5 @@ Revenues come from AVS. But AVS should make enough money and pay it to feed all 
 - [[EigenLayer] Eigen token Whitepaper](https://docs.eigenlayer.xyz/assets/files/EIGEN_Token_Whitepaper-0df8e17b7efa052fd2a22e1ade9c6f69.pdf)
 - [[Symbiotic] Symbiotic docs](https://docs.symbiotic.fi/)
 - [[BlockSec] Can Symbiotic Challenge EigenLayer in Restaking? Symbiotic VS. EigenLayer: A Comparative Analysis](https://blocksec.com/blog/eigenlayer-competitor-symbiotic)
+- [[Solayer] How Solayer elevates endogenous AVSs for optimal restaking](https://solayer.org/resources/solayer-101/how-solayer-elevates-endogenous-avss-for-optimal-restaking)
+- [[Babylon] Whitepaper](https://docs.babylonlabs.io/papers/btc_staking_litepaper(EN).pdf)
