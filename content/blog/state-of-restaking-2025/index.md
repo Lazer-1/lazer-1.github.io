@@ -8,7 +8,7 @@ sort_by = "date"
 katex_enable = true
 +++
 
-## Problems in existing PoS networks
+## Recap on the problems in existing PoS networks
 
 1. **Bootstrapping and attracting capital into a PoS network is difficult**, especially for smaller chains. 
 
@@ -17,6 +17,8 @@ katex_enable = true
 1. **Volatility**. The cost of corruption for an attacker fluctuates based on the staked token's underlying price.
 
 1. **Centralization.** The assets of many PoS chains are concentrated in the hands of early investors, founders and team members and foundations, at least in the early stage of the projects. A concentrated asset exposes the network to centralization when the asset is staked to validate the network. [^2] For example, approximately 91% of Toncoin tokens are concentrated in a few wallets, leading to concerns over centralization. While such high concentrations often suggest strong backing from major investors or early adopters, they also carry risks such as potential market manipulation or volatility. If large amounts of TON tokens are moved or sold by these holders, it could lead to significant price swings that may harm market stability. [^3]
+
+These reasons are good enough for the rise of restaking, because it aims to eliminate the need for bootstrapping a project token and resolving the intricacies of maintaining its price.
 
 ## Why do people restake anyways?
 
@@ -86,6 +88,8 @@ In this section, we review how different restaking protocols have been evolving 
 
 ### EigenLayer
 
+![eigenlayer-logo.png](./eigenlayer-logo.png)
+
 Since its birth in 2023, EigenLayer's goal has been to sharing the security of an existing network, namely Ethereum mainnet. It provides decentralized systems with no additional cost of having to launch a project token. EigenLayer is the first restaking protocol ever to be created. Now in 2025, EigenLayer supports depositing more ERC20 tokens. However, Ethereum remains as the most dominant asset that is deposited:
 
 _Restaked token distribution on Defillama as of Jan 31, 2025_
@@ -148,6 +152,8 @@ However, it is possible to get a liquid restaking token on other liquid staking 
 
 ### Symbiotic
 
+![symbiotic-logo.png](./symbiotic-logo.png)
+
 Symbiotic has the same goal as EigenLayer: a marketplace for a pooled economic security. Networks will come to Symbiotic to borrow security, and restakers will supply that.
 
 _Symbiotic's core participants._
@@ -188,6 +194,8 @@ _[Karak](https://karak.network/) is heavily underdocumented. Skipping for now._
 
 ### Solayer
 
+![solayer-logo.png](./solayer-logo.png)
+
 **Approach.** Solana is takes an interesting approach that is different than its counterparts on Ethereum. Its major focus is "the hardware accelerated SVM blockchain" as it is on their homepage.
 
 Their direction is fundamentally different from EigenLayer and alike in the sense that they do aim to generate revenue as a protocol themselves by leveraging state-of-the-art tech. The revenue does not come from the restaking part; it comes from their own superior tech that enables:
@@ -211,6 +219,8 @@ _[Picasso](https://www.picasso.network/) is skipped for now._
 
 ### Jito
 
+![jito-logo.png](./jito-logo.png)
+
 **Node Consensus Networks**. This is what an AVS is on EigenLayer.
 
 **VRT**. Liquid restaking token in Jito restaking vaults.
@@ -220,6 +230,8 @@ _[Picasso](https://www.picasso.network/) is skipped for now._
 How the blockchain of Bitcoin is not run on PoS, but still can be restaked.
 
 ### Babylon
+
+![babylon-logo.png](./babylon-logo.png)
 
 **Big idea.** It is a Bitcoin staking started with this problem:
 
@@ -251,6 +263,8 @@ There are many things in the diagram, but it will suffice to understand that Bab
 It's important to note that in fact the restaked tokens do not get bridged over to the actual chains. When slashing happens, the restaked tokens on Bitcoin will be directly slashed.
 
 ### Pell network
+
+WIP
 
 # Current problems
 
