@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blockchain L1, L2 and DeFi Research">
+    <title>Lazer 1 Research</title>
+    
+    <!-- og tags -->
+    <meta property="og:title" content="Lazer 1 Research">
+    <meta property="og:description" content="Blockchain L1, L2 and DeFi Research">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https:&#x2F;&#x2F;research.lazer1.xyz">
+    <meta property="og:image" content="https://research.lazer1.xyz/logo_black.svg">
+    <!-- twitter (big card)-->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@lazer_1_xyz">
+    <meta name="twitter:creator" content="@lazer_1_xyz">
+    <meta name="twitter:title" content="Lazer 1 Research">
+    <meta name="twitter:description" content="Blockchain L1, L2 and DeFi Research">
+    <meta name="twitter:image" content="https://research.lazer1.xyz/logo_black.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://research.lazer1.xyz/style.css?h=f96266b8aba3614658d7">
+    
+    
+    
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FPG624LQM9"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-FPG624LQM9');
+    </script>
+</head>
+<body>
+    
+    <header class="space">
+        <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+            <img class="logo-white" src="https://research.lazer1.xyz/logo_white.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+            <img class="logo-black" src="https://research.lazer1.xyz/logo_black.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+            <h2>RESEARCH LOG</h2>
+        </div>
+        
+        
+        <nav class="header-links">
+            
+            <a href="https:&#x2F;&#x2F;github.com&#x2F;lazer-1">GitHub</a>
+            
+            
+        </nav>
+        
+    </header>
+    
+    
+    
+    
+    <main>
+        
+        
+        <ul class="no-list-bullet">
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;making-sense-of-liquid-restaking&#x2F;">Making sense of liquid restaking</a></li>
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;making-sense-of-starknet-architecture-and-l1-l2-messaging&#x2F;">Making sense of Starknet architecture and L1-L2 Messaging</a></li>
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;how-jettons-work-on-ton-with-sharding-in-mind-part-1&#x2F;">How Jettons work on TON with sharding in mind (Part 1)</a></li>
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;crash-course-on-the-state-of-restaking-2025&#x2F;">Crash course on the state of restaking: 2025</a></li>
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;how-jettons-work-on-ton-with-sharding-in-mind-part-2&#x2F;">How Jettons work on TON with sharding in mind (Part 2)</a></li>
+            
+            <li><a class="post-link" href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;liquidation-math-on-a-defi-lending-protocol-how-much-to-liquidate&#x2F;">Liquidation math on a DeFi lending protocol: how much to liquidate?</a></li>
+            
+        </ul>
+        <p><a href="https:&#x2F;&#x2F;research.lazer1.xyz&#x2F;blog&#x2F;">Archive</a></p>
+        
+    </main>
+    
+    
+    <div class="dark-mode-buttons">
+        <button class="dark-mode-button" id="dark-mode-on"><img src="https://research.lazer1.xyz/dark_mode.svg" width="24" height="24" alt="Dark mode" aria-label="dark mode toggle" title="Dark mode"></button>
+        <button class="dark-mode-button" id="dark-mode-off"><img src="https://research.lazer1.xyz/light_mode.svg" width="24" height="24" alt="Light mode" aria-label="light mode toggle" title="Light mode"></button>
+    </div>
+    <script>
+        const cls = document.body.classList;
+        const getSessionTheme = sessionStorage.getItem("theme");
+        if (getSessionTheme === "dark") {
+            cls.toggle("dark-mode", true);
+        } else if (getSessionTheme === "light") {
+            cls.toggle("dark-mode", false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            cls.toggle("dark-mode", true);
+        }
+
+        document.getElementById("dark-mode-on").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", true);
+            sessionStorage.setItem("theme", "dark");
+        });
+        document.getElementById("dark-mode-off").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", false);
+            sessionStorage.setItem("theme", "light");
+        });
+    </script>
+    <noscript>
+        <style>
+            .dark-mode-buttons {
+                display: none;
+            }
+        </style>
+    </noscript>
+</body>
+</html>
