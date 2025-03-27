@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blockchain L1, L2 and DeFi Research">
+    <title>Lazer 1 Research | Making sense of Starknet architecture and L1-L2 Messaging</title>
+    
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@lazer_1_xyz">
+<meta name="twitter:creator" content="@lazer_1_xyz">
+
+<meta name="twitter:title" content="Lazer 1 Research | Making sense of Starknet architecture and L1-L2 Messaging">
+<meta property="og:title" content="Lazer 1 Research | Making sense of Starknet architecture and L1-L2 Messaging">
+
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/" />
+
+<meta property="og:image" content="https://lazer1.xyz/logo_black.svg">
+<meta name="twitter:image" content="https://lazer1.xyz/logo_black.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://lazer1.xyz/style.css?h=f96266b8aba3614658d7">
+
+
+    
+    
+    
+    <!-- Paste this right before your closing </head> tag -->
+    <script type="text/javascript">
+    (function (f, b) { if (!b.__SV) { var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))); }; } var a = b; "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel"); a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d; }; a.people.toString = function () { return a.toString(1) + ".people (stub)"; }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split( " "); for (h = 0; h < i.length; h++) g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]); }; } for ( var d = {}, e = ["get_group"].concat( Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]); return d; }; b._i.push([e, f, c]); }; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g); } })(document, window.mixpanel || []);
+    window.mixpanel.init("b477cb68b3e8754f05577f53e8dc3375", {
+        debug: true,
+        track_pageview: true,
+        persistence: "localStorage",
+    });
+  </script>
+</head>
+<body>
+    
+<header class="space">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img class="logo-white" src="https://lazer1.xyz/logo_white.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <img class="logo-black" src="https://lazer1.xyz/logo_black.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <h2>RESEARCH LOG</h2>
+    </div>
+    <a href="https:&#x2F;&#x2F;lazer1.xyz">&LeftArrow; Home</a>
+</header>
+
+    
+<main>
+    <h1>Making sense of Starknet architecture and L1-L2 Messaging</h1>
+    
+    <p class="secondary" style="display: inline">28 March, 2024</p>
+        
+            <p class="secondary" style="display: inline">|</p>
+        
+    
+    
+    <p class="secondary" style="display: inline">
+        Written by
+        
+            <a href="https://github.com/9oelm" target="_blank">9oelm</a>
+        
+    </p>
+    
+    
+    <h2>Table of Contents</h2>
+    <ul>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#starknet-architecture">Starknet architecture</a>
+                
+                    <ul>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#mempool-gateway">Mempool (Gateway)</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#sequencer">Sequencer</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#full-node">Full node</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#prover">Prover</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#verifier">Verifier</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#starknet-core-contract">Starknet core contract</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#starknet-bridge-contract">Starknet bridge contract</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#architecture-diagram">Architecture diagram</a>
+                                
+                            </li>
+                        
+                    </ul>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#l1-l2-messaging">L1-L2 messaging</a>
+                
+                    <ul>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#overview">Overview</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#legacybridge-legacybridge-sol">LegacyBridge (LegacyBridge.sol)</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#multibridge-starknettokenbridge-sol">MultiBridge (StarknetTokenBridge.sol)</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#enroll-a-token-bridge">Enroll a token bridge</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#transfer-a-token-from-l1-to-l2-deposit">Transfer a token from L1 to L2 (deposit)</a>
+                                
+                                    <ul>
+                                        
+                                            <li>
+                                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#deposit-code-examination">Deposit code examination</a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#transfer-a-token-from-l2-to-l1-withdraw">Transfer a token from L2 to L1 (withdraw)</a>
+                                
+                                    <ul>
+                                        
+                                            <li>
+                                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#indexing-withdrawal-initiations">Indexing withdrawal initiations</a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#withdrawal-limit">Withdrawal limit</a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                    </ul>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/#references">References</a>
+                
+            </li>
+        
+    </ul>
+    
+    <div class="space"></div>
+    <p>With the introduction of the STRK provisions program, Starknet has garnered significant public attention, sparking a growing curiosity regarding its technical intricacies. Particularly, there exists a notable gap in understanding the architecture of Starknet and the mechanics of L1-L2 messaging. Thus, the purpose of this writing is to provide a comprehensive elucidation of these two topics.</p>
+<h1 id="starknet-architecture">Starknet architecture</h1>
+<p>Let us start by defining the architecture of Starknet. Starknet consists of several components:</p>
+<ul>
+<li>Mempool (Gateway)</li>
+<li>Sequencer</li>
+<li>Prover</li>
+<li>Full node</li>
+<li>Starknet core contract</li>
+<li>Verifier</li>
+<li>Starknet bridge contract</li>
+</ul>
+<h2 id="mempool-gateway">Mempool (Gateway)</h2>
+<p>A mempool (memory pool) is a temporary storage for pending transactions that are not included in a block yet. When you submit a transaction, it doesn't go straight into the network and make changes. It will have to wait in the mempool.</p>
+<p>The mempool performs a preliminary validation on the transaction, like checking the length of calldata.</p>
+<!-- Write more about mempool -->
+<h2 id="sequencer">Sequencer</h2>
+<p>Sequencer retrieves transactions from mempool and puts them in a specific sequential order, and produces blocks containing them.</p>
+<p>In essence, a sequencer has two core tasks<sup class="footnote-reference"><a href="#1">1</a></sup>: </p>
+<ol>
+<li>sequencing (ordering): it orders transactions, determining the canonical sequence of blocks for a given chain fork. It then appends new blocks to this sequence.</li>
+<li>executing (validation): it executes these transactions, updating the system’s state based on a given function. The block produced by the sequencer is submitted to Ethereum as a single compact proof (aka &quot;rollup&quot;).</li>
+</ol>
+<p>Starknet has some open-source sequencers:</p>
+<ul>
+<li><a href="https://github.com/keep-starknet-strange/madara/">Mandara</a></li>
+<li><a href="https://github.com/starkware-libs/blockifier">Blockifier</a></li>
+<li><a href="https://github.com/lambdaclass/starknet_stack/tree/main/sequencer">Kraken</a> (seemingly discontinued by Lambdaclass)</li>
+</ul>
+<p>A sequencer is needed in L2 blockchains for scalability and performance wins. By processing transactions off-chain in batches, it is able to achieve much faster speed. </p>
+<p>Blockchains may have a centralized sequencer, like Starknet. The centralized sequencer can function as perfectly as a decentralized one. But the primary drive for the decentralization comes from mitigating the risk of censorship, because transactions can be reordered, included, or excluded by a centralized party without no one noticing it. In light of this, <a href="https://starkware.co/resource/starknet-decentralization-a-roadmap-in-broad-strokes/">Starknet is actively moving towards decentralization, as described by their blog post in Oct 2023</a>, although the sequencer is likely to be one of the last components in the stack to be decentralized.</p>
+<h2 id="full-node">Full node</h2>
+<p>Starknet has a few full node implementations:</p>
+<ul>
+<li><a href="https://github.com/eqlabs/pathfinder">Pathfinder</a></li>
+<li><a href="https://github.com/NethermindEth/juno">Juno</a></li>
+<li><a href="https://github.com/starkware-libs/papyrus">Papyrus</a></li>
+</ul>
+<p>The full node is responsible for handling all <a href="https://github.com/starkware-libs/starknet-specs/blob/master/api/starknet_api_openrpc.json">API requests specified per spec</a>.</p>
+<h2 id="prover">Prover</h2>
+<p>The prover generates proofs for the transactions in the blocks produced by the sequencer. <a href="https://github.com/lambdaclass/cairo-vm">cairo-vm</a> is used as a prover. Another implementation is <a href="https://github.com/NethermindEth/cairo-vm-go">cairo-vm-go</a>.</p>
+<p>The prover receives blocks from the sequencer, and processes each block to assert the correctness, and generates proof, and submits the proof to Ethereum.</p>
+<p>Starknet uses SHARP, which stands for a SHARed Prover. It is:</p>
+<blockquote>
+<p>a powerful system designed to generate STARK proofs for aggregated Cairo programs. Cairo, being a general computation programming language, allows for <em>the accommodation of various code logics in one single proof</em>. </p>
+</blockquote>
+<blockquote>
+<p>SHARP processes batches of transactions off-chain, and validates the proof for their computation on-chain, amortizing the cost of all transactions across a single proof. The generated unified STARK proof is validated through an on-chain Solidity verifier contract, enabling SHARP to enhance throughput, reduce gas fees, and minimize latency.<sup class="footnote-reference"><a href="#2">2</a></sup></p>
+</blockquote>
+<p>In other words, different Cairo programs are run together and a single proof for all of those programs are generated. <a href="https://book.starknet.io/ch03-03-provers.html">Here's a good read on on SHARP</a>.</p>
+<h2 id="verifier">Verifier</h2>
+<p>Starknet manages a verifier smart contract on Ethereum responsible for verifying the proof generated from the Cairo VM. If the proof is valid, Starknet's state root is updated to the newest one. The verification and state transition can be seen at <a href="https://github.com/starkware-libs/cairo-lang/blob/efa9648f57568aad8f8a13fbf027d2de7c63c2c0/src/starkware/starknet/solidity/Starknet.sol#L286">https://github.com/starkware-libs/cairo-lang/blob/efa9648f57568aad8f8a13fbf027d2de7c63c2c0/src/starkware/starknet/solidity/Starknet.sol#L286</a>.</p>
+<h2 id="starknet-core-contract">Starknet core contract</h2>
+<p>The Starknet core contract is an Ethereum contract deployed at <a href="https://etherscan.io/address/0xc662c410C0ECf747543f5bA90660f6ABeBD9C8c4#code"><code>0xc662c410C0ECf747543f5bA90660f6ABeBD9C8c4</code></a> at time of writing. The source code can be viewed at <a href="https://github.com/starkware-libs/cairo-lang/blob/efa9648f57568aad8f8a13fbf027d2de7c63c2c0/src/starkware/starknet/solidity/Starknet.sol">Starknet.sol</a>.</p>
+<p>The core contract:</p>
+<ul>
+<li>stores the list of verifier contracts</li>
+<li>manages L1-L2 messaging</li>
+<li>oversees state commitment and update between L1 and L2</li>
+</ul>
+<h2 id="starknet-bridge-contract">Starknet bridge contract</h2>
+<p>When we say 'Starknet bridge contract', it means multiple contracts that work together to enable bridging. Bridging mean not only the transfer of a token, but also any arbitrary messages between Ethereum and Starknet.</p>
+<p>The bridge contracts can be located at:</p>
+<ul>
+<li><a href="https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/LegacyBridge.sol">LegacyBridge.sol</a>: the old bridge contract that used to be deployed per token. Still in use by most prominent tokens on Starknet, like wBTC, USDC, USDT, and more.</li>
+<li><a href="https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/StarknetTokenBridge.sol">StarknetTokenBridge.sol</a>: the new bridge contract that is used to bridge multiple tokens with just one contract. Adding a token is permissionless.</li>
+<li><a href="https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/StarkgateManager.sol">StarkgateManager.sol</a>: manager contract that oversees tokens bridged by <code>StarknetTokenBridge.sol</code>. Can deactivate or block a token, enroll a new token, etc.</li>
+<li><a href="https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/StarkgateRegistry.sol">StarkgateRegistry.sol</a>: maintains the list of bridged tokens.</li>
+<li><a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/cairo/token_bridge.cairo">token_bridge.cairo</a>: the bridge contract on L2 that is compatible with both <code>LegacyBridge.sol</code> and <code>StarknetTokenBridge.sol</code>. Users submit withdraw requests from here. L1 bridges use this L2 contract to deposit tokens into L2. More on this later.</li>
+</ul>
+<h2 id="architecture-diagram">Architecture diagram</h2>
+<p><a href="https://drive.google.com/file/d/1DL62Put2DFxHyqYq5jIXcleDs4sEyTPP/view?usp=sharing">Below diagram</a> helps understand how these components work together.</p>
+<div class="mxgraph" style="max-width:100%;width:100%;border:1px solid transparent;" data-mxgraph="{&quot;highlight&quot;:&quot;#0000ff&quot;,&quot;nav&quot;:true,&quot;resize&quot;:true,&quot;toolbar&quot;:&quot;zoom layers tags lightbox&quot;,&quot;url&quot;:&quot;https://drive.google.com/uc?id=1DL62Put2DFxHyqYq5jIXcleDs4sEyTPP&amp;export=download&quot;}"></div>
+<script type="text/javascript" src="https://viewer.diagrams.net/embed2.js?&fetch=https%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1DL62Put2DFxHyqYq5jIXcleDs4sEyTPP%26export%3Ddownload"></script>
+<p>First, the user creates and submits a transaction to the mempool. Ths sequencer picks up the transactions from the mempool, orders, validates and executes them using Cairo VM. The Cairo program execution yields an execution trace, aggregating all the transactions appearing in that block to it. The execution trace, along with the previous state root, is fed into the prover.</p>
+<p>The prover, again using Cairo VM, generates a new state root and proof based on the data received from the sequencer. Then it passes those to the verifier contract. The Starknet core contract verifies the validity of the state update, and if it is valid, it updates the state. Then the user's transaction is successfully accepted on L1.</p>
+<p>Now that we know how Starknet works, we are ready to talk about L1-L2 messaging. The Starknet bridge contract in the diagram deliberately has not been elaborated in this section for that reason.</p>
+<h1 id="l1-l2-messaging">L1-L2 messaging</h1>
+<h2 id="overview">Overview</h2>
+<p>Here's an overview of L1-L2 messaging on Starknet. Here's <a href="https://docs.starknet.io/documentation/architecture_and_concepts/Network_Architecture/messaging-mechanism/">a diagram from Starknet's official documentation</a>:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/l2_l1_messaging_mechanism.png" alt="L2→L1 message mechanism" /></p>
+<p>Keep this in mind, as we are going to go through each step in detail in words. Then you can fully grasp the concept by coming back to this diagram later.</p>
+<h2 id="legacybridge-legacybridge-sol">LegacyBridge (<a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/(https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/LegacyBridge.sol)"><code>LegacyBridge.sol</code></a>)</h2>
+<p>Starknet used to have a bridge per token. This means that for every single token that was meant to be bridged, the same bridge has to be deployed again. This bridge is still live in production and still serves most of the bridge tokens to this date. The list of tokens that make use of <code>LegacyBridge</code> can be discovered at <a href="https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json">https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json</a>.</p>
+<p>Some of them are:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/bridged_tokens.png" alt="Bridged assets" /></p>
+<p>You can see that each token's bridge address is different from one another, which means that <code>LegacyBridge</code> is only limited to one deployment per token.</p>
+<h2 id="multibridge-starknettokenbridge-sol">MultiBridge (<a href="https://lazer1.xyz/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/(https://github.com/starknet-io/starkgate-contracts/blob/cairo-1/src/solidity/StarknetTokenBridge.sol)"><code>StarknetTokenBridge.sol</code></a>)</h2>
+<p>But deploying a bridge per token is quite troublesome, isn't it? Ideally, it would be nice if a single bridge can handle multiple number of tokens, which means you don't need to deploy a bridge every single time you want to bridge a new token.</p>
+<p>This bridge is the latest standard on Starknet for any newer tokens on Starknet. Any new tokens looking for being bridged should use this contract instead.</p>
+<p>The deployment of this bridge is managed by the StarkWare team themselves, so all you need to do is to enroll a token and use this bridge.</p>
+<h2 id="enroll-a-token-bridge">Enroll a token bridge</h2>
+<p>The first thing to be done is to create an ERC20 token on Ethereum. The reason we don't do it on Starknet is that Starknet bridge contract is going to create an ERC20 contract on Starknet for us automatically once we enroll a token bridge.</p>
+<p>Once you have your Ethereum ERC20 token address ready, you can use it to call <code>enrollTokenBridge</code>. Enrolling a new token bridge is permissionless. This means anyone can submit a transaction to enroll a new token bridge for any token with a small gas fee:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F53c4939f05b3d122e4c904533f5fdb27457abcde%2Fsrc%2Fsolidity%2FStarkgateManager.sol%23L132-L138&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>This relates to a few other contracts, namely <code>StarkgateRegistry.sol</code> and <code>StarkgateBridge.sol</code> (which is in fact inherited by Starknet core contract, <code>Starknet.sol</code>).</p>
+<p>Let us look at the implementation of <code>registryContract.enlistToken(token, bridge())</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F53c4939f05b3d122e4c904533f5fdb27457abcde%2Fsrc%2Fsolidity%2FStarkgateRegistry.sol%23L84-L99&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>It checks if there is an existing bridge for a token, or a blocked token. If it passes that check, the <code>bridge</code> address is assigned to the corresponding <code>token</code> key in the <code>tokenToBridge</code> mapping. This way, the registry contract maintains a mapping of <code>token</code> to <code>bridge</code> mapping.</p>
+<p>Then, it calls <code>enrollToken</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F53c4939f05b3d122e4c904533f5fdb27457abcde%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L168-L197&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>In <code>sendDeployMessage</code>, <code>sendMessageL2</code> is called, and the sequencer will pick up <code>deployMessagePayload(token)</code> and send it to the relevant <code>l1_handler</code> represented by <code>HANDLE_TOKEN_DEPLOYMENT_SELECTOR</code> at the contract address of <code>l2TokenBridge()</code> on L2:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F53c4939f05b3d122e4c904533f5fdb27457abcde%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L431-L441&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F53c4939f05b3d122e4c904533f5fdb27457abcde%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L1066-L1113&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The only important line is <code>deploy_syscall(class_hash, l1_token.into(), calldata.span(), false).unwrap_syscall();</code>. You are deploying a new ERC20 contract, which has initially been triggered by your call to <code>enrollTokenBridge</code>.</p>
+<p>Once this is complete, you will have an ERC20 contract on Starknet that corresponds to yours on Ethereum, joined together by Starknet bridge contract.</p>
+<h2 id="transfer-a-token-from-l1-to-l2-deposit">Transfer a token from L1 to L2 (deposit)</h2>
+<p>For a token using the <em>legacy</em> bridge, either call <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/LegacyBridge.sol#L61"><code>function deposit(uint256 amount, uint256 l2Recipient)</code></a> or <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/StarknetTokenBridge.sol#L285"><code>deposit(address token, uint256 amount, uint256 l2Recipient)</code></a>. The legacy bridge is designed to support the legacy function with only two parameters for backward compatibility as well as the newest function signature with three parameters:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/legacy_bridge_deposit_functions.png" alt="Legacy bridge lagacy and new deposit functions" /></p>
+<p>Here's <a href="https://etherscan.io/tx/0x909c08e23c32f75e2c2a6195fcb73cf8984d5226642c10cc8bb56fbbb7100668">an example transaction that deposits 69915.000000 USDC</a>:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/deposit_usdc.png" alt="deposit_usdc.png" /></p>
+<p>For a token that uses the new bridge, call <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/StarknetTokenBridge.sol#L285"><code>deposit(address token,uint256 amount,uint256 l2Recipient)</code></a>. The new bridge, also called MultiBridge, is capable of handling multiple tokens with just one bridge, unlike the legacy bridge. It is deployed at <a href="https://etherscan.io/address/0xF5b6Ee2CAEb6769659f6C091D209DfdCaF3F69Eb#writeProxyContract"><code>0xF5b6Ee2CAEb6769659f6C091D209DfdCaF3F69Eb</code></a> on Ethereum.</p>
+<p><a href="https://etherscan.io/tx/0xa032e66a591fb08cb3b1e2329fe495d922d7369243f3876fd9a43c865cfbfd56">Here's an example transaction that deposits 1,277.777777777777777776 ZEND</a>:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/deposit_zend.png" alt="deposit_usdc.png" /></p>
+<p>Do note that <code>l2recipient</code> is a <code>uint256</code> variable because <code>felt252</code> needs to fit in the variable. <code>address</code> won't do it because it's only 20 bytes, whereas <code>felt252</code> will need 31 bytes. <code>uint256</code> containing 32 bytes is deemed to be a suitable choice to contain <code>felt252</code> variable. For those who are new with Starknet, <code>felt252</code> is a variable type that can be declared in Cairo that is used to represent many things on Starknet.</p>
+<h3 id="deposit-code-examination">Deposit code examination</h3>
+<p>Now, let's examine the <code>deposit</code> function. The legacy and new ones essentially function in the same way, so we will only look into the new function.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L285-L312&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>First, notice that the function is <code>payable</code>, although we are depositing an ERC20 token. This is because we need to use Ether as a fee for deposit. The fee will be used by the sequencer to send the message to L2. The gas used in the deposit transaction cannot be directly used as a fee for depositing into L2. <sup class="footnote-reference"><a href="#3">3</a></sup></p>
+<p>Then, <code>acceptDeposit</code> checks if the fee is enough and transfers the specified amount of token into the contract:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L152-L158&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The allowed range of fee is in fact hardcoded into <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/Fees.sol#L1-L29"><code>Fee</code> contract</a>.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FFees.sol%23L1-L29&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>This implies that it's not actually an estimation, but just a hardcoded value. So you don't need to call <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/StarknetTokenBridge.sol#L143"><code>estimateDepositFee</code></a> to 'estimate' it. You can just hardcode your fee at some small amount of Ether that falls within <code>MIN_FEE</code> and <code>MAX_FEE</code>.</p>
+<p>After checking the fee, we call <code>sendDepositMessage</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L443-L465&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p><code>require(l2TokenBridge() != 0, &quot;L2_BRIDGE_NOT_SET&quot;);</code> checks whether the L2 bridge address is set. In the case of MultiBridge, this will be the corresponding MultiBridge contract (<a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/cairo/token_bridge.cairo">token_bridge.cairo</a>) on Starknet, currently deployed at <a href="https://starkscan.co/contract/0x0616757a151c21f9be8775098d591c2807316d992bbc3bb1a5c1821630589256">0x0616757a151c21f9be8775098d591c2807316d992bbc3bb1a5c1821630589256</a>.</p>
+<p>Then, we make sure the amount is non-zero by writing <code>require(amount &gt; 0, &quot;ZERO_DEPOSIT&quot;)</code>.</p>
+<p>The next line is possible due to <code>using UintFelt252 for uint256;</code> directive at the top of the contract code. <code>UintFelt252</code> is a small library to manage <code>Felt252</code> data type. So we just make sure that <code>l2Recipient</code> is a valid L2 address by writing <code>require(l2Recipient.isValidL2Address(), &quot;L2_ADDRESS_OUT_OF_RANGE&quot;);</code>.</p>
+<p>If you have been following well, you should notice that <code>bool isWithMsg = selector == HANDLE_DEPOSIT_WITH_MESSAGE_SELECTOR;</code> should be <code>false</code>, because the <code>selector</code> that is being passed down is <code>HANDLE_TOKEN_DEPOSIT_SELECTOR</code> which is not <code>HANDLE_DEPOSIT_WITH_MESSAGE_SELECTOR</code> because we don't have any <code>message</code> - it is an empty array.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L389-L413&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>We create a payload using <code>depositMessagePayload</code> function. Everything that is relevant to the transaction (in this case, deposit) that the user is making needs to be included in the payload, because it will be an input to generate a hash that represents L1 to L2 message hash. </p>
+<p>Failure to include all relevant information in the payload will result in a message hash from which certain information cannot be confirmed. For example, if you deposited 500 USDC but if the amount of 500 USDC is not reflected in the hash, there is no proof on blockchain that you deposited 500 USDC anymore.</p>
+<p>When <code>withMessage == false</code>, the <code>payload</code> would be <code>[token, msg.sender, l2Recipient, amountLow, amountHigh]</code>. The reason we encode the amount into low and high variables is that the amount is a variable of type <code>uint256</code>, which means it cannot be represented by <code>felt252</code> which is only 31 bytes. To be able to represent that information on Starknet, we divide it into two variables, which would have been fine if we were to only care about Ethereum.</p>
+<p>If <code>withMessage == true</code>, the <code>payload</code> would contain <code>[token, msg.sender, l2Recipient, amountLow, amountHigh, message.length, message[0], message[1], ..., message[message.length - 2], message[message.length - 1]]</code>. As such, a user can send an arbitrary length of message along with the token.</p>
+<p>Finally, we call <code>sendMessageToL2</code> from the Starknet core contract. Let's look at how <code>sendMessageToL2</code> is implemented in that contract:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FStarknetMessaging.sol%23L110-L125&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The function first increments the <code>nonce</code>. The <code>nonce</code> is very important in this context, because it prevents the transactions of the same payload to be differentiated from one another. Remember that the <code>payload</code> can contain <code>[token, msg.sender, l2Recipient, amountLow, amountHigh]</code> in its simplest form. Then, if the <code>msg.sender</code> sends the same <code>amount</code> of a <code>token</code> to the same <code>l2Recipient</code> more than once, the same message hash will be produced if a unique nonce is not included in the hash.</p>
+<p>After incrementing the nonce, the hash is derived by using <code>getL1ToL2MsgHash</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FStarknetMessaging.sol%23L88-L105&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Notice that everything related to the current transaction is included in the hash to avoid any hash collisions.</p>
+<p>Once Starknet sequencer detects the transaction by waiting for enough L1 confirmations for it, it initiates the desired L2 transaction by invoking the relevant function in <code>token_bridge.cairo</code> marked with <code>#[l1_handler]</code>.</p>
+<p>Depending on the existence of the message, the sequencer will pick up the transaction and call <code>handle_deposit</code> or <code>handle_deposit_with_message</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L1009-L1025&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L1027-L1064&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The first thing to note is that <code>only_from_l1_bridge</code> asserts that the deposit is always from the L1 bridge. <code>l1_handler</code>'s first parameter is always the address of the L1 contract that initiated the transaction, which is being used to validate <code>only_from_l1_bridge</code>. Failure to do so will directly result in a security vulnerability, because anyone can forge a deposit payload and call <code>sendMessageToL2</code> in the Starknet core contract with it. That means anyone might be able to mint a token to L2 without having to prove that they have a token on L1. </p>
+<p>The only authoritative deposit is from the L1 bridge, which is a separate contract from the core contract. The L1 bridge could be any of the addresses specified as <code>l1_bridge_address</code> at <a href="https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json">https://github.com/starknet-io/starknet-addresses/blob/master/bridged_tokens/mainnet.json</a>.</p>
+<p>In case of <code>handle_token_deposit</code>, we just need to increase the token balance of the <code>l2_recipient</code>. This is done by <code>handle_deposit_common</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L362-L373&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p><code>permissioned_mint</code> is a function that is present in the ERC20 contract deployed by Starknet core contract. We will cover this later on. For now, it's enough to know that it mints a token to <code>l2_recipient</code>.</p>
+<p>If a deposit contains a message, <code>handle_deposit_with_message</code> will be invoked instead. After calling <code>handle_deposit_common</code>, the next procedure is just invoking <code>on_receive</code> of <code>l2_recipient</code> with the calldata containing the information about the deposit, which is <code>[l2_token, amount, depositor, message]</code>.</p>
+<p><a href="https://docs.starknet.io/documentation/tools/starkgate-automated_actions_with_bridging/">This feature is called 'smart deposit'</a>, where the deposit moves funds from L1 to L2 and then triggers subsequent actions. If <code>on_receive</code> isn't implemented or fails to return <code>true</code>, <code>handle_deposit_with_message</code> will not succeed, and the fund will have to be recovered with <a href="https://github.com/starknet-io/starkgate-contracts/blob/5a10fd263d29cd032b7229691d043520edae0737/src/solidity/StarknetTokenBridge.sol#L535"><code>depositWithMessageCancelRequest</code></a> because there is no way it can be received by <code>l2_recipient</code> anymore.</p>
+<p>Once one of these <code>l1_handler</code>s successfully run, the <code>l2_recipient</code> should be able to see the increase in the amount of the token on its wallet.</p>
+<p>Later on, <code>l1ToL2Messages</code> are processed altogether at the same time at the Starknet core contract, when the state is being updated to reflect the relevant transaction that just happened on L2:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FStarknet.sol%23L234-L240&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The <code>programOutput</code> is the execution result of StarkNet OS program that encompasses multiple Cairo programs that were processed at a time.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FOutput.sol%23L76-L160&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p><code>processMessages</code> will enter the <code>else</code> branch at line 116. Then, <code>msgFeePlusOne</code> for each message will be accessed to add to <code>totalMsgFees</code>. Right after that, <code>messages[messageHash] = 0</code> to specify that the corresponding message has been consumed to L2.</p>
+<h2 id="transfer-a-token-from-l2-to-l1-withdraw">Transfer a token from L2 to L1 (withdraw)</h2>
+<p>The withdrawal begins by calling either <code>initiate_withdraw</code> or <code>initiate_token_withdraw</code> in <code>token_bridge.cairo</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L478-L532&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p><a href="https://starkscan.co/tx/0x03a968865e46941194dd7236f3f663aafc9e8468f6e9b83b5d8729404ac9f71c">Here's a transaction that calls <code>initiate_withdraw</code> for 207.59 USDC</a>:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/initiate_withdraw_usdc.png" alt="Initiate withdraw USDC" /></p>
+<p>Do note that this is from some time ago, on Feb 9, 2023, which is the reason that the transaction is a call to the legacy function <code>initiate_withdraw</code>. But the upgraded legacy bridges also now support <code>initiate_token_withdraw</code>, which has the exact same functionality. Although the legacy function still works, it is left there for backward compatibility. Any new applications should strive to use <code>initiate_token_withdraw</code> wherever possible.</p>
+<p><a href="https://starkscan.co/tx/0x032867dac0df25cca3f17c1008727abded40b4316c12e63e8a2342306c7d6d42">So here's a transaction that calls <code>initiate_token_withdraw</code> on 54230 USDC</a>:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/initiate_token_withdraw_usdc.png" alt="Initiate withdraw USDC" /></p>
+<p>Mainly, two things are happening:</p>
+<ol>
+<li>The L2 token is being burnt by <code>permissioned_burn</code>.</li>
+<li>A message is being sent to L1 by <code>send_message_to_l1_syscall</code>. The message payload always contains <code>[0, l1_recipient, l1_token, amount]</code>. <code>0</code> is used to mean a 'transfer from Starknet'.</li>
+</ol>
+<p>Once the message arrives at L1, its hash will be stored in <a href="https://github.com/starkware-libs/cairo-lang/blob/efa9648f57568aad8f8a13fbf027d2de7c63c2c0/src/starkware/starknet/solidity/StarknetMessaging.sol#L43-L45"><code>l2ToL1Messages</code></a> (which in the body of <code>function processMessages</code> below, is supplied as a parameter called <code>messages</code>):</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FOutput.sol%23L102-L116&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Starknet core contract will iterate through every message from L2 to L1 and store each in its <code>messageHash</code>. We observe that <code>messages[messageHash] += 1;</code> because we want to signify that the message has been received. It is possible that <code>messages[messageHash] &gt; 1</code> in case of the same withdrawal request. Also, note that we do not have a <code>nonce</code> here unlike deposit. The reason is that we don't need to differentiate one withdrawal from another if they are of the same <code>l1_recipient</code>, <code>l1_token</code> and <code>amount</code>. </p>
+<p>As for deposit, <code>nonce</code> makes each instance of deposit unique. For example, if you deposited 500 USDC at 3PM and another 500 USDC at 4PM with the exact same <code>l2_recipient</code>, somehow the deposit at 4PM might have worked and 3PM might have not. In that case, the two deposits are not the 'same' anymore, and the distinct instance of deposit at 3PM needs to be cancelled. As per the dev's comment:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FStarknetMessaging.sol%23L121-L122&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>On the other hand, withdrawal cannot be cancelled, so there is no reason to keep track of <code>nonce</code> for it.</p>
+<p>Once <code>processMessages</code> is triggered by the sequencer to update the state, the withdrawal request should now be placed in <a href="https://github.com/starkware-libs/cairo-lang/blob/efa9648f57568aad8f8a13fbf027d2de7c63c2c0/src/starkware/starknet/solidity/StarknetMessaging.sol#L43-L45"><code>l2ToL1Messages</code></a>. If so, <code>recipient</code> at L1 can now call <code>withdraw</code> to claim the bridged token:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L482-L500&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>We can see that <code>consumeMessage</code> just creates the payload that we saw in <code>initiate_token_withdraw</code> already and calls <code>consumeMessageFromL2</code>. <code>TRANSFER_FROM_STARKNET</code> is set to <code>0</code>, which is in line with what we have done on L2:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fsolidity%2FStarknetTokenBridge.sol%23L467-L480&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Finally, <code>consumeMessageFromL2</code> at Starknet core contract derives the hash with <code>keccak256(abi.encodePacked(fromAddress, uint256(uint160(msg.sender)), payload.length, payload))</code>. If the hash exists, we subtract 1 away from <code>l2ToL1messages[msgHash]</code> to tell that this <code>msgHash</code> has been fully consumed.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarkware-libs%2Fcairo-lang%2Fblob%2Fefa9648f57568aad8f8a13fbf027d2de7c63c2c0%2Fsrc%2Fstarkware%2Fstarknet%2Fsolidity%2FStarknetMessaging.sol%23L127-L145&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<!-- TODO: figure how?? -->
+<!-- You might be wondering then, how is ['one-click withdrawal'](https://www.starknet.io/en/content/simple-guide-on-starkgate-1click-withdraw) implemented if you would need to include `msg.sender` as an input to the hash? One-click withdrawal is a feature offered by SpaceShard team, where once you `initiate_token_withdraw` from L2, you don't need to submit another `withdraw` transaction on L1, given you pay a small amount of service fee to their relayer.   -->
+<p>Once the message is consumed, the fund is transferred to the <code>recipient</code> suing <code>transferOutFunds</code>. At this point the <code>recipient</code> should be able to see a change in the balance on its wallet.</p>
+<h3 id="indexing-withdrawal-initiations">Indexing withdrawal initiations</h3>
+<p>Now, if you are an dApp builder who wants to provide withdrawal functionality to users, you would need to track the calls to <code>initiate_token_withdraw</code> at L2 because users will need to use the parameters of <code>initiate_token_withdraw</code> as an input to generate message hash to access <code>l2ToL1messages</code> later on L1.</p>
+<p>This means you would need some off-chain indexer that does this. You can simply keep track of the event emitted from <code>initiate_token_withdraw</code>, which is:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fstarknet-io%2Fstarkgate-contracts%2Fblob%2F5a10fd263d29cd032b7229691d043520edae0737%2Fsrc%2Fcairo%2Ftoken_bridge.cairo%23L199-L209&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Then, the indexer would at times query <code>l2ToL1messages[msgHash]</code> to see if the message is ready for consumption at L1 by constructing <code>msgHash</code> from the information given from <code>WithdrawInitiated</code> events. If <code>l2ToL1messages[msgHash] &gt; 0</code>, the frontend can display an option to submit a transaction for <code>withdraw</code> at L2.</p>
+<p>In fact, this is the current implementation of <a href="https://starkgate.starknet.io/">Starkgate</a>, a full-stack bridge software maintained by StarkWare. It constantly checks if you have a pending withdrawal by querying an off-chain indexer hosted at <code>starkgate.starknet.io/transfer-log/api/*</code> once you enter the website and connect your wallets:</p>
+<p><img src="/blog/making-sense-of-starknet-architecture-and-l1-l2-messaging/starkgate_withdraw_indexer.png" alt="Starkgate withdrawal indexer" /></p>
+<p>Once it detects that you have a pending withdrawal, you will have a little toast that tells you to submit a transaction to complete the withdrawal of your fund on L1.</p>
+<h3 id="withdrawal-limit">Withdrawal limit</h3>
+<p>The Starknet bridge contract implements something called <a href="https://docs.starknet.io/documentation/tools/starkgate_architecture/#stark_gate_withdrawal_limit">'withdrawal limit' or 'withdrawal quota'</a>. So far we have seen a few lines of code where it enforces some rule related to it, but didn't bother to explain there.</p>
+<p>The withdrawal limit can be enabled by a designated security agent only. This means even ERC20 token contract owners cannot enforce a withdrawal limit. It is only enabled when the security determines that there is a serious security issue that may bring about withdrawals of unsual amount.</p>
+<!-- ## Send a message
+
+## Cancel a message -->
+<h1 id="references">References</h1>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><a href="https://book.starknet.io/ch03-02-sequencers.html">https://book.starknet.io/ch03-02-sequencers.html</a></p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p><a href="https://starkware.co/resource/joining-forces-sharp/">https://starkware.co/resource/joining-forces-sharp/</a></p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p><a href="https://docs.starknet.io/documentation/architecture_and_concepts/Network_Architecture/messaging-mechanism/#l1-l2-message-fees">https://docs.starknet.io/documentation/architecture_and_concepts/Network_Architecture/messaging-mechanism/#l1-l2-message-fees</a></p>
+</div>
+<ul>
+<li><a href="https://book.starknet.io/title-page.html">The Starknet Book</a></li>
+<li><a href="https://github.com/keep-starknet-strange/madara/blob/main/docs/architecture.md">Mandara architecture</a></li>
+<li><a href="https://starkware.co/resource/joining-forces-sharp/">Joining Forces: SHARP - Save Costs and Enhance Ethereum’s Scalability: If it’s Written in Cairo, SHARP Can Prove it</a></li>
+<li><a href="https://www.youtube.com/watch?v=VMNreeZkAgI">Starknet Community Call #35 | SHARP - the backbone of Starknet</a></li>
+<li><a href="https://www.starknet.io/en/content/sharp-starkwares-shared-prover-video">SHARP: StarkWare's Shared Prover | Kineret Segal</a></li>
+<li><a href="https://www.starknet.io/en/learn/glossary">Starknet Glossary</a></li>
+<li><a href="https://docs.starknet.io/documentation/architecture_and_concepts/Network_Architecture/transaction-life-cycle/">Transaction lifecycle</a></li>
+<li><a href="https://david-barreto.com/starknets-architecture-review/">Starknet architecture review</a></li>
+<li><a href="https://book.starknet.io/ch03-00-architecture.html">Starknet architecture</a></li>
+</ul>
+
+    <h1>Comments</h1>
+    <script src="https://giscus.app/client.js"
+        data-repo="lazer-1/lazer-1.github.io"
+        data-repo-id="R_kgDOJzlwUg"
+        data-category="Comments"
+        data-category-id="DIC_kwDOJzlwUs4Cevy9"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</main>
+
+    <div class="dark-mode-buttons">
+        <button class="dark-mode-button" id="dark-mode-on"><img src="https://lazer1.xyz/dark_mode.svg" width="24" height="24" alt="Dark mode" aria-label="dark mode toggle" title="Dark mode"></button>
+        <button class="dark-mode-button" id="dark-mode-off"><img src="https://lazer1.xyz/light_mode.svg" width="24" height="24" alt="Light mode" aria-label="light mode toggle" title="Light mode"></button>
+    </div>
+    <script>
+        const cls = document.body.classList;
+        const getSessionTheme = sessionStorage.getItem("theme");
+        if (getSessionTheme === "dark") {
+            cls.toggle("dark-mode", true);
+        } else if (getSessionTheme === "light") {
+            cls.toggle("dark-mode", false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            cls.toggle("dark-mode", true);
+        }
+
+        document.getElementById("dark-mode-on").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", true);
+            sessionStorage.setItem("theme", "dark");
+        });
+        document.getElementById("dark-mode-off").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", false);
+            sessionStorage.setItem("theme", "light");
+        });
+    </script>
+    <noscript>
+        <style>
+            .dark-mode-buttons {
+                display: none;
+            }
+        </style>
+    </noscript>
+</body>
+</html>

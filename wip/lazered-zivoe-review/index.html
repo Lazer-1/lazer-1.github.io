@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blockchain L1, L2 and DeFi Research">
+    <title>Lazer 1 Research | Lazered #0: Zivoe review</title>
+    
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@lazer_1_xyz">
+<meta name="twitter:creator" content="@lazer_1_xyz">
+
+<meta name="twitter:title" content="Lazer 1 Research | Lazered #0: Zivoe review">
+<meta property="og:title" content="Lazer 1 Research | Lazered #0: Zivoe review">
+
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://lazer1.xyz/wip/lazered-zivoe-review/" />
+
+<meta property="og:image" content="https://lazer1.xyz/logo_black.svg">
+<meta name="twitter:image" content="https://lazer1.xyz/logo_black.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://lazer1.xyz/style.css?h=f96266b8aba3614658d7">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.css" integrity="sha384-7lU0muIg/i1plk7MgygDUp3/bNRA65orrBub4/OSWHECgwEsY83HaS1x3bljA/XV" crossorigin="anonymous">
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.js" integrity="sha384-RdymN7NRJ+XoyeRY4185zXaxq9QWOOx3O7beyyrRK4KQZrPlCDQQpCu95FoCGPAE" crossorigin="anonymous"></script>
+
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+    });
+</script>
+
+
+    
+    
+    
+    <!-- Paste this right before your closing </head> tag -->
+    <script type="text/javascript">
+    (function (f, b) { if (!b.__SV) { var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))); }; } var a = b; "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel"); a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d; }; a.people.toString = function () { return a.toString(1) + ".people (stub)"; }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split( " "); for (h = 0; h < i.length; h++) g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]); }; } for ( var d = {}, e = ["get_group"].concat( Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]); return d; }; b._i.push([e, f, c]); }; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g); } })(document, window.mixpanel || []);
+    window.mixpanel.init("b477cb68b3e8754f05577f53e8dc3375", {
+        debug: true,
+        track_pageview: true,
+        persistence: "localStorage",
+    });
+  </script>
+</head>
+<body>
+    
+<header class="space">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img class="logo-white" src="https://lazer1.xyz/logo_white.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <img class="logo-black" src="https://lazer1.xyz/logo_black.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <h2>RESEARCH LOG</h2>
+    </div>
+    <a href="https:&#x2F;&#x2F;lazer1.xyz">&LeftArrow; Home</a>
+</header>
+
+    
+<main>
+    <h1>Lazered #0: Zivoe review</h1>
+    
+    <p class="secondary" style="display: inline">17 April, 2024</p>
+        
+            <p class="secondary" style="display: inline">|</p>
+        
+    
+    
+    <p class="secondary" style="display: inline">
+        Written by
+        
+            <a href="https://github.com/9oelm" target="_blank">9oelm</a>
+        
+    </p>
+    
+    
+    <h2>Table of Contents</h2>
+    <ul>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#preceding-audits">Preceding audits</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#liquidity-provision-deposit">Liquidity provision (deposit)</a>
+                
+                    <ul>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#tranche">Tranche</a>
+                                
+                            </li>
+                        
+                    </ul>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#borrowing">Borrowing</a>
+                
+                    <ul>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#types-of-fixed-term-loan">Types of fixed-term loan</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#fee">Fee</a>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#defaults">Defaults</a>
+                                
+                                    <ul>
+                                        
+                                            <li>
+                                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#delinquent-loan">Delinquent loan</a>
+                                            </li>
+                                        
+                                            <li>
+                                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#defaulted-loan">Defaulted loan</a>
+                                            </li>
+                                        
+                                    </ul>
+                                
+                            </li>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#loan-workflow">Loan workflow</a>
+                                
+                            </li>
+                        
+                    </ul>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#redemptions-withdrawal">Redemptions (withdrawal)</a>
+                
+                    <ul>
+                        
+                            <li>
+                                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#redemption-in-case-of-defaults">Redemption in case of defaults</a>
+                                
+                            </li>
+                        
+                    </ul>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#yield-generation-and-distribution">Yield generation and distribution</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#initial-tranche-offering-ito">Initial Tranche Offering (ITO)</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/wip/lazered-zivoe-review/#rewards">Rewards</a>
+                
+            </li>
+        
+    </ul>
+    
+    <div class="space"></div>
+    <div
+  style="width:100%;display:flex;justify-content:center;align-items:center;"
+>
+<img src="/blog/lazered-zivoe-review/zivoe-logo.svg" width="50%" />
+</div>
+<p>Zivoe is a credit protocol where on-chain lenders lend on-chain assets to borrowers whose collaterals are secured off-chain, frequently verified by the Zivoe team.</p>
+<h2 id="preceding-audits">Preceding audits</h2>
+<p>Zivoe has undergone an audit with Runtime Verification in late 2023. It might be a good idea to visit them for a better understanding of the protocol:</p>
+<ul>
+<li><a href="/blog/lazered-zivoe-review/Zivoe_Core_Contracts.pdf">Core contracts audit</a></li>
+<li><a href="/blog/lazered-zivoe-review/Zivoe_Locker_Contracts.pdf">Locker contracts audit</a></li>
+</ul>
+<h2 id="liquidity-provision-deposit">Liquidity provision (deposit)</h2>
+<p>Anyone can deposit liquidity into Zivoe; only stablecoin is allowed.</p>
+<h3 id="tranche">Tranche</h3>
+<p>There are two types of tranches: senior and junior tranche.</p>
+<table><thead><tr><th></th><th>Senior Tranche</th><th>Junior Tranche</th></tr></thead><tbody>
+<tr><td>Yield</td><td>Generally lower yield</td><td>Generally higher yield</td></tr>
+<tr><td>Risk</td><td>Lower risk; Protected from defaults up to the notional value of junior tranche deposits.</td><td>Higher risk; Served as a first-loss capital in the event of defaults</td></tr>
+<tr><td>tranche token</td><td><code>zSTT</code> (Zivoe senior tranche)</td><td><code>zJTT</code> (Zivoe junior tranche)</td></tr>
+</tbody></table>
+<p>Upon depositing into the tranche, the protocol will mint tranche tokens to represent their provision status. Deposit and tranche tokens are always 1:1. The deposit functions are <code>depositJunior</code> and <code>depositSenior</code> respectively:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeTranches.sol%23L264-L315&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Burning a tranche token will reclaim the original deposit. Staking it with <code>stake</code> will earn an additional yield (we will come to the explanation of the code later):</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeRewards.sol%23L251-L262&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>This could be a realistic example of the impact of defaults on tranches: let's say the notional value of the senior tranche is 10M USD, and that of the junior tranche 5M USD. And then if there is a loss of 4M USD due to defaults on the loans, the junior tranche investors fully absorb the impact by losing 4M USD. However, the senior tranche depositors are not impacted by the defaults at all and their deposits are still intact due to the junior tranche absorbing the defaults.</p>
+<h2 id="borrowing">Borrowing</h2>
+<p>A prospective borrower would need to go through an application process including KYC and credit evaluation. Then, the Zivoe team would offer a loan to the borrower based on his credit health.</p>
+<p>Borrowers are expected to make repayments according to the prearranged schedule. Zivoe's smart contracts handle the accounting.</p>
+<p>It's also possible to refinance the loan by making another application that needs to be approved. The loan term has to be updated. Multiple loans will be merged into a single loan to simplify repayment.</p>
+<h3 id="types-of-fixed-term-loan">Types of fixed-term loan</h3>
+<p>Zivoe supports two types of a fixed loan:</p>
+<ol>
+<li>Bullet loan: regular interests payments are made throughout the term of the loan, and the entire principal is paid at the maturity date.</li>
+<li>Amortizing loan: parts of the principal and interests are regularly repaid.</li>
+</ol>
+<p>The payment schedule is represented by <code>paymentSchedule</code> of <code>struct Loan</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L111-L111&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Below is a very simple graph illustrating different types of fixed-term loans.</p>
+<p><img src="/blog/lazered-zivoe-review/fixed_loan_comparison.png" alt="Fixed term loan comparison" /></p>
+<p>Zivoe supports various durations and payment frequencies in these two types of loans.</p>
+<h3 id="fee">Fee</h3>
+<p>There isn't a 'borrowing fee'. Only interest rate exists to put an extra burden on the borrower. </p>
+<p>However, late fee interest rate is added upon the original interest rate if a payment is missed. Late fee interest only begins to accrue on the outstanding principal. When the missed payments are paid off, the late fee interest is removed.</p>
+<h3 id="defaults">Defaults</h3>
+<h4 id="delinquent-loan">Delinquent loan</h4>
+<p>When a loan payment is missed, late fees immediately start accruing on the outstanding balance of the loan. This loan is called 'delinquent'. A limited grace period is given for the missed repayment.</p>
+<p>To resolve a delinquent loan, the borrower must supply late fees in addition to the principal and interest due on the missed payment</p>
+<h4 id="defaulted-loan">Defaulted loan</h4>
+<p>Loans are marked defaulted when a borrower hasn't made timely repayments within the grace period.</p>
+<p>Zivoe tracks the value of defaulted loans with a global variable <code>defaults</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeGlobals.sol%23L45-L45&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>This will lower the adjusted supply of the junior tranche first, and then if it exceeds the notional value of the junior tranche, the adjusted supply of the senior tranche will decrease accordingly too. This is reflected in the function <code>adjustedSupplies</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeGlobals.sol%23L123-L136&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Adjusted supplies also affect the target return. For example, suppose that we have 100,000 <code>zSTT</code> and 10,000 zJTT, each tranche targeting 1% and 3% return.</p>
+<ul>
+<li>Under a normal circumstance without defaults. Then, the expected return is $100,000 \times 1\% + 10,000 \times 3\% = 1,300 \text{ USDC}$.</li>
+<li>When there is a default of 2,000 USD (or USDC), the expected return is $100,000 \times 1\% + 8,000 \times 3\% = 1,240 \text{ USDC}$, because the junior tranche absorbs the default first.</li>
+</ul>
+<p>The default does not decrease the circulating supply of tranche tokens. The only number that is affected by the default is the adjusted supply.</p>
+<p>When the defaults are resolved, the global variable <code>defaults</code> will be decreased and the adjusted supply of tranches will be recovered to the level close to (or the same as) the circulating supply.</p>
+<h3 id="loan-workflow">Loan workflow</h3>
+<p>The loan is managed by <code>OCC_Modular.sol</code> contract, which stands for on-chain credit. The first step that happens on-chain related to any loan is to create a loan offer:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L531-L570&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Upon meeting all input validations, <code>Loan</code> will be created. <code>Loan</code> is the following struct:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L99-L113&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Notice that when the loan is created, <code>paymentDueBy = 0</code> meaning that the repayment can happen from this moment, <code>paymentsRemaining = term</code>, <code>offerExpiry = block.timestamp + 3 days</code>, and <code>state = LoanState.Offered</code>.</p>
+<p>If the underwriting team changes its mind, it can always call <a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-testing/lib/zivoe-core-foundry/src/lockers/OCC/OCC_Modular.sol#L520-L529">cancelOffer</a>, which then converts the state to <code>LoanState.Cancelled</code>.</p>
+<p>Then, with <code>state</code> still being <code>LoanState.Offered</code>, the <code>borrower</code> accepts the loan:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L459-L487&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>After variable validations, the <code>stablecoin</code> of amount <code>loans[id].principalOwed</code> is sent to the borrower.</p>
+<p>Later on, any address can <code>makePayment</code> for an loan of <code>id</code>. The <code>amount</code> doesn't need to be specified; it is automatically calculated by <code>amountOwed</code>.</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L572-L602&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Alternatively, the borrower can choose to pay a loan in full at once:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L489-L518&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>If the loan isn't repaid on time, the underwriting team calls <code>markDefault</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCC%2FOCC_Modular.sol%23L604-L618&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<h2 id="redemptions-withdrawal">Redemptions (withdrawal)</h2>
+<p>A liquidity provider can withdraw their original stablecoin deposit by burning a tranche token. He needs to follow these steps:</p>
+<ol>
+<li>Submit a redemption request specifying <code>uint256 amount</code> to be redeemed. This stakes the requested tranche tokens into the redemption locker:</li>
+</ol>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCR%2FOCR_Modular.sol%23L212-L228&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<ol start="2">
+<li>
+<p>Wait for the next epoch: an epoch is 14 days. The liquidity provider will wait for the next epoch to start to be able to redeem.</p>
+<p>The epoch is ticked automatically whenever relevant actions are called.</p>
+</li>
+</ol>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCR%2FOCR_Modular.sol%23L309-L336&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCR%2FOCR_Modular.sol%23L155-L159&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>The modifier <code>_tickEpoch</code> follows any mutative functions in <code>OCR_Modular</code> (On-chain redemption) contract, making sure the epoch is ticked (updated) before the functions are called.</p>
+<ol start="3">
+<li>Process the redemption of tranche tokens:</li>
+</ol>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCR%2FOCR_Modular.sol%23L253-L307&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>the maximum amount of tranche tokens that can be redeemed in each epoch is determeined by the available capital for redemption in the redemption locker. This means that tranche investors may not be able to redeem a full <code>amount</code> in the original request. In this case, tranche investors are treated fairly: each of them will only be able to redeem a $\frac{\text{redemption request amount} \times \text{total available capital}_{\text{epoch}}}{sum(\text{outstanding redemption request amount for all requests})}$.</p>
+<p>For example, two users submit redemption requests during epoch 1: one for 100,000 zSTT and another for 100,000 zJTT. With 50,000 USDC available in the redemption locker, these users have to wait until epoch 2 to process their requests.</p>
+<p>As epoch 2 starts, they can begin redeeming their tokens. However, due to the limited available capital (50,000 USDC), and a total outstanding request size of 200,000 tranche tokens, each user can redeem a maximum of 25,000 USDC. In subsequent epochs, if more capital becomes available, more tranche tokens can be redeemed.</p>
+<h3 id="redemption-in-case-of-defaults">Redemption in case of defaults</h3>
+<p>As discussed, the defaults should always be absorbed by the junior tranche first. This is reflected in <code>tickEpoch</code> function:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2Flockers%2FOCR%2FOCR_Modular.sol%23L309-L336&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>When <code>totalDefaults &gt; zJTTSupply</code>, this means that the amount of defaults exceeds the notional value of the liquidity deposited in the junior tranche. That means <code>zJTT</code> for now is virtually worthless, because it shouldn't be able to redeem any money. Therefore, the discount for the junior tranche at this epoch, reprsented by <code>epochDiscountJunior</code>, is set at 100%, which is <code>BIPS = 10000</code>. This will also affect the senior tranche as the value of defaults is greater than what the junior tranche can cover. In that case, the discount rate for the senior tranche is: <code>epochDiscountSenior = (totalDefaults * RAY / (totalDefaults - zJTTSupply)) / 10**23</code>, because <code>totalDefaults - zJTTSupply</code> is the amount that cannot be covered by the junior tranche.</p>
+<p>Let's give an example. Assume the supply of tranche tokens is 1,000,000 zSTT and 250,000 zJTT, and then a loan of 125,000 USDC defaults. The impact of this default means that the adjusted tranche token supplies are now 1,000,000 zSTT and 125,000 zJTT, indicating that the junior tranche has lost half of its backed value due to the default. Consequently, junior liquidity providers will encounter a 50% discount on their redemption requests. Let's consider a scenario where a junior liquidity provider requests to redeem 50,000 zJTT. Suppose there's 60,000 USDC in the redemption locker and no other redemption requests are outstanding. Given the 50% default loss, this junior liquidity provider can only redeem 25,000 USDC for his 50,000 zJTT, equivalent to a rate of 0.5 USDC per zJTT. However, if a senior liquidity provider also wishes to redeem their tranche tokens, say 10,000 zSTT, in the same epoch, they would be able to redeem the 10,000 zSTT for a full 10,000 USDC, unaffected by the junior tranche's loss.</p>
+<p>On ther other thand, when <code>totalDefaults &lt;= zTTSupply</code>, the discount rate for the junior tranche should be $\frac{\text{total defaults}}{\text{liquidity supplied in junior tranche}}$. This is calculated by <code>epochDiscountJunior = (totalDefaults * RAY / zJTTSupply) / 10**23</code>. And the senior tranche will not be affected by any means. Let's leave it at that, and we will come to the matter of unit precision later.</p>
+<h2 id="yield-generation-and-distribution">Yield generation and distribution</h2>
+<p>The yield is generated in two ways:</p>
+<ol>
+<li>Deploying an unused capital in the tranches into other DeFi protocols</li>
+<li>Earning interests from the borrowers</li>
+</ol>
+<p>The strategies in the deployment of an unused capital are implemented by several lockers prefixed with 'OCY', which stands for 'on-chain yield':</p>
+<ul>
+<li><a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/lockers/OCY/OCY_Convex_A.sol#L39-L39">OCY_Convex_A.sol</a>: allocates stablecoins to the alUSD/FRAXBP meta-pool and stakes the LP tokens on Convex (pool id <code>106</code>)</li>
+<li><a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/lockers/OCY/OCY_Convex_B.sol#L34-L34">OCY_Convex_B.sol</a>: allocates stablecoins to the sUSD base-pool and stakes the LP tokens on Convex. (pool id <code>4</code>)</li>
+<li><a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/lockers/OCY/OCY_Convex_C.sol#L34-L34">OCY_Convex_C.sol</a>: allocates stablecoins to the PYUSD/USDC base-pool and stakes the LP tokens on Convex (pool id <code>270</code>)</li>
+<li><a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/lockers/OCY/OCY_OUSD.sol#L19-L19">OCY_OUSD.sol</a>: escrows OUSD and handles accounting for yield distributions.</li>
+</ul>
+<p>The generated yield plus any additional returns known as residual, is distributed to all stakeholders in the protocol:</p>
+<ul>
+<li>ZVE (Zivoe Token) stakers: they are awared a share of revenue adjustable via governance generated by the protocol.</li>
+<li>Zivoe development company: the operating team behind Zivo protocol earns a share of protocol revenue adjustable via governance.</li>
+<li>Senior/junior liquidity providers: they are only awarded the remaining yield after the above two stakeholders are compensated. Both the senior and junior tranche have annual target yields that the protocol aims to deliver. Zivoe's governance system regularly calibrates these targets, ensuring they align with the portfolio's current risk profile. This enables Zivoe to deliver risk-adjusted yield to liquidity providers. </li>
+</ul>
+<p>The distribution algorithm that manages the disbursement of yield to these stakeholders is known as the Yield Distribution Locker (&quot;YDL&quot;).</p>
+<p>The yield is sent to the YDL when:</p>
+<ul>
+<li>as soon as a borrower makes a payment</li>
+<li>the time reaches the end of a month (30 days)</li>
+</ul>
+<p>Then, the yield is converted to USDC, and it is distributed to the aforementioned stakeholders. First, a certain % of protocol revenue is split between ZVE stakers and the Zivo team. Then, the remainder is shared among liquidity providers and resiual participants.</p>
+<h2 id="initial-tranche-offering-ito">Initial Tranche Offering (ITO)</h2>
+<p>Initially, the tranches <a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/ZivoeTranches.sol#L61-L61"><code>ZivoeTranches</code> contract will be locked</a>, leaving users with the only option to deposit in <a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/ZivoeITO.sol#L91-L91"><code>ZivoeITO</code></a> first.</p>
+<p>Essentially, the tranches in ITO works the same way as the tranches in <code>ZivoeTranches</code>. The Zivoe team <code>commence</code>s the ITO period:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeITO.sol%23L337-L347&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Then, the same <code>depositJunior</code> and <code>depositSenior</code> functions will be available.</p>
+<p>The only difference is that each deposit now gives you a credit called <code>juniorCredit</code> or <code>seniorCredit</code>, which tracks the balance of <code>pZVE</code> (pre-ZVE):</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeITO.sol%23L109-L110&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Observe that upon deposit, it will increase the credit amount of the user in the corresponding tranche proportional to the amount of stablecoin deposited:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeITO.sol%23L265-L265&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeITO.sol%23L292-L292&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>Here's a breakdown of received/allocated tokens for deposit in each tranche:</p>
+<table><thead><tr><th></th><th>1 unit of stablecoin deposited in senior tranche</th><th>1 unit of stablecoin deposited in junior tranche</th></tr></thead><tbody>
+<tr><td>corresponding amount of received tranche token</td><td>1 zSTT</td><td>1 zJTT</td></tr>
+<tr><td>corresponding amount of allocated (vested) pre-ZVE token</td><td>3 pZVE</td><td>1 pZVE</td></tr>
+</tbody></table>
+<p>At the end of the ITO, 5% of the total ZVE supply will be airdropped to the depositors based on their proportional ownership of pZVE. The ZVE aidrop is under a 1-year linear vesting schedule.</p>
+<p>The proportional ownership of pZVE is calculated as in <code>claimAirdrop</code> function:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeITO.sol%23L197-L242&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>In the code above, <code>upper * middle / lower</code> represents the proportional ownership of pZVE per user, which is <a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/ZivoeRewardsVesting.sol#L375-L387"><code>amountToVest</code> parameter in <code>createVestingSchedule</code></a>. Calling <code>createVestingSchedule</code> will immediately create a vesting schedule for that user with that specified amount. <code>amountToVest</code> could be expressed in this way: </p>
+<p>$$
+\text{upper} = (depositedAmount({\text{senior tranche}, \text{user}}) \times 3 \\ + depositedAmount({\text{junior tranche}, \text{user}}))\\ 
+$$
+$$
+\text{middle} = \frac{totalSupply(\text{ZVE})}{20} = totalSupply(\text{ZVE}) \times 5\% \\ 
+$$
+$$
+\text{lower} = totalSupply(\text{zSTT}) \times 3 + totalSupply(\text{zJTT})
+$$
+$$
+\text{amount to vest} = \frac{upper \times middle}{lower}
+$$</p>
+<p>In <code>claimAirdrop</code>, a vesting schedule is created for that user by calling <code>createVestingSchedule</code>:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeRewardsVesting.sol%23L375-L425&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>When claimAirdrop calls <code>createVestingSchedule</code>, <code>daysToCliff</code> is set as zero, so the ITO participants are able to claim the vested amount right away because it is a simple linear vesting schedule:</p>
+<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fsherlock-audit%2F2024-03-zivoe%2Fblob%2Fd4111645b19a1ad3ccc899bea073b6f19be04ccd%2Fzivoe-core-foundry%2Fsrc%2FZivoeRewardsVesting.sol%23L277-L294&style=atom-one-dark&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showFullPath=on&showCopy=on"></script>
+<p>ITO participants will be able to claim <code>vestingScheduleOf[account].vestingPerSecond * (block.timestamp - vestingScheduleOf[account].start) - vestingScheduleOf[account].totalWithdrawn;</code> at any point.</p>
+<h2 id="rewards">Rewards</h2>
+<p>Zivoe maintains three types of 'rewards' contract:</p>
+<ul>
+<li><code>stJTT</code>: staked junior tranche token</li>
+<li><code>stSTT</code>: staked senior tranche token</li>
+<li><code>stZVE</code>: staked Zivoe Token</li>
+</ul>
+<p>Each of these tokens is managed by <a href="https://github.com/sherlock-audit/2024-03-zivoe/blob/d4111645b19a1ad3ccc899bea073b6f19be04ccd/zivoe-core-foundry/src/ZivoeRewards.sol#L26-L26"><code>ZivoeRewards</code> contract</a>, which facilites staking and yield distribution from staking.</p>
+
+    <h1>Comments</h1>
+    <script src="https://giscus.app/client.js"
+        data-repo="lazer-1/lazer-1.github.io"
+        data-repo-id="R_kgDOJzlwUg"
+        data-category="Comments"
+        data-category-id="DIC_kwDOJzlwUs4Cevy9"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</main>
+
+    <div class="dark-mode-buttons">
+        <button class="dark-mode-button" id="dark-mode-on"><img src="https://lazer1.xyz/dark_mode.svg" width="24" height="24" alt="Dark mode" aria-label="dark mode toggle" title="Dark mode"></button>
+        <button class="dark-mode-button" id="dark-mode-off"><img src="https://lazer1.xyz/light_mode.svg" width="24" height="24" alt="Light mode" aria-label="light mode toggle" title="Light mode"></button>
+    </div>
+    <script>
+        const cls = document.body.classList;
+        const getSessionTheme = sessionStorage.getItem("theme");
+        if (getSessionTheme === "dark") {
+            cls.toggle("dark-mode", true);
+        } else if (getSessionTheme === "light") {
+            cls.toggle("dark-mode", false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            cls.toggle("dark-mode", true);
+        }
+
+        document.getElementById("dark-mode-on").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", true);
+            sessionStorage.setItem("theme", "dark");
+        });
+        document.getElementById("dark-mode-off").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", false);
+            sessionStorage.setItem("theme", "light");
+        });
+    </script>
+    <noscript>
+        <style>
+            .dark-mode-buttons {
+                display: none;
+            }
+        </style>
+    </noscript>
+</body>
+</html>

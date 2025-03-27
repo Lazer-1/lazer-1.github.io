@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Blockchain L1, L2 and DeFi Research">
+    <title>Lazer 1 Research | How Jettons work on TON with sharding in mind (Part 2)</title>
+    
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@lazer_1_xyz">
+<meta name="twitter:creator" content="@lazer_1_xyz">
+
+<meta name="twitter:title" content="Lazer 1 Research | How Jettons work on TON with sharding in mind (Part 2)">
+<meta property="og:title" content="Lazer 1 Research | How Jettons work on TON with sharding in mind (Part 2)">
+
+
+<meta property="og:type" content="website">
+
+<meta property="og:url" content="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/" />
+
+<meta property="og:image" content="https://lazer1.xyz/logo_black.svg">
+<meta name="twitter:image" content="https://lazer1.xyz/logo_black.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@100..800&family=Kanit:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://lazer1.xyz/style.css?h=f96266b8aba3614658d7">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.css" integrity="sha384-7lU0muIg/i1plk7MgygDUp3/bNRA65orrBub4/OSWHECgwEsY83HaS1x3bljA/XV" crossorigin="anonymous">
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/katex.min.js" integrity="sha384-RdymN7NRJ+XoyeRY4185zXaxq9QWOOx3O7beyyrRK4KQZrPlCDQQpCu95FoCGPAE" crossorigin="anonymous"></script>
+
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.19/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          // customised options
+          // • auto-render specific keys, e.g.:
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          // • rendering keys, e.g.:
+          throwOnError : false
+        });
+    });
+</script>
+
+
+    
+    
+    
+    <!-- Paste this right before your closing </head> tag -->
+    <script type="text/javascript">
+    (function (f, b) { if (!b.__SV) { var e, g, i, h; window.mixpanel = b; b._i = []; b.init = function (e, f, c) { function g(a, d) { var b = d.split("."); 2 == b.length && ((a = a[b[0]]), (d = b[1])); a[d] = function () { a.push([d].concat(Array.prototype.slice.call(arguments, 0))); }; } var a = b; "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel"); a.people = a.people || []; a.toString = function (a) { var d = "mixpanel"; "mixpanel" !== c && (d += "." + c); a || (d += " (stub)"); return d; }; a.people.toString = function () { return a.toString(1) + ".people (stub)"; }; i = "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split( " "); for (h = 0; h < i.length; h++) g(a, i[h]); var j = "set set_once union unset remove delete".split(" "); a.get_group = function () { function b(c) { d[c] = function () { call2_args = arguments; call2 = [c].concat(Array.prototype.slice.call(call2_args, 0)); a.push([e, call2]); }; } for ( var d = {}, e = ["get_group"].concat( Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]); return d; }; b._i.push([e, f, c]); }; b.__SV = 1.2; e = f.createElement("script"); e.type = "text/javascript"; e.async = !0; e.src = "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL ? MIXPANEL_CUSTOM_LIB_URL : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//) ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js" : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"; g = f.getElementsByTagName("script")[0]; g.parentNode.insertBefore(e, g); } })(document, window.mixpanel || []);
+    window.mixpanel.init("b477cb68b3e8754f05577f53e8dc3375", {
+        debug: true,
+        track_pageview: true,
+        persistence: "localStorage",
+    });
+  </script>
+</head>
+<body>
+    
+<header class="space">
+    <div style="width: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <img class="logo-white" src="https://lazer1.xyz/logo_white.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <img class="logo-black" src="https://lazer1.xyz/logo_black.svg" width="426.5" height="123.5" alt="Lazer 1 Research">
+        <h2>RESEARCH LOG</h2>
+    </div>
+    <a href="https:&#x2F;&#x2F;lazer1.xyz">&LeftArrow; Home</a>
+</header>
+
+    
+<main>
+    <h1>How Jettons work on TON with sharding in mind (Part 2)</h1>
+    
+    <p class="secondary" style="display: inline">19 July, 2024</p>
+        
+            <p class="secondary" style="display: inline">|</p>
+        
+    
+    
+    <p class="secondary" style="display: inline">
+        Written by
+        
+            <a href="https://github.com/9oelm" target="_blank">9oelm</a>
+        
+    </p>
+    
+    
+    <h2>Table of Contents</h2>
+    <ul>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/#jetton-wallet">jetton-wallet</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/#on-bounce">On bounce</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/#op-transfer">op::transfer</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/#op-internal-transfer">op::internal_transfer</a>
+                
+            </li>
+        
+            <li>
+                <a href="https://lazer1.xyz/blog/how-jettons-work-on-ton-with-sharding-in-mind-part-2/#references">References</a>
+                
+            </li>
+        
+    </ul>
+    
+    <div class="space"></div>
+    <h2 id="jetton-wallet">jetton-wallet</h2>
+<p>Now, we have a look at <a href="https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L1"><code>jetton-wallet.fc</code></a>, which is the 'child' contract of jetton.</p>
+<p>Let us start with the TL-B scheme of storage:</p>
+<iframe frameborder="0" style="width:100%; height:120px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L24-L27&lang=c"></iframe>
+<p>The storage contains <code>balance</code>, <code>owner_address</code>, <code>jetton_master_address</code>, and <code>jetton_wallet_code</code>. Should be self-explanatory. Recall that <code>jetton_wallet_code</code> is the compiled code of <code>jetton-wallet</code>.</p>
+<p><code>load_data()</code> loads all information stored:</p>
+<iframe frameborder="0" style="width:100%; height:120px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L29-L32&lang=c"></iframe>
+<p><code>save_data</code> does the opposite:</p>
+<iframe frameborder="0" style="width:100%; height:100px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L34-L36&lang=c"></iframe>
+<p><code>pack_jetton_wallet_data</code> does nothing but to store the data into a cell, which was the same for <code>jetton-minter</code>. Recall that this is because we can only store a cell:</p>
+<iframe frameborder="0" style="width:100%; height:187px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-utils.fc%23L1-L8&lang=c"></iframe>
+<p>Now, let us start from <code>recv_internal</code>, which is invoked when the contract receives an internal message:</p>
+<iframe frameborder="0" style="width:100%; height:600px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L208-L244&lang=c"></iframe>
+<h2 id="on-bounce">On bounce</h2>
+<p>From the previous section explaining <code>jetton-minter</code>, we know that the 4th bit is <code>bounced:Bool</code>:</p>
+<iframe frameborder="0" style="width:100%; height:123px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L135-L138&lang=c"></iframe>
+<p>That is why we are checking the 4th bit of the message in the code:</p>
+<pre data-lang="c++" style="background-color:#2b303b;color:#c0c5ce;" class="language-c++ "><code class="language-c++" data-lang="c++"><span>slice cs = in_msg_full.</span><span style="color:#bf616a;">begin_parse</span><span>();
+</span><span style="color:#b48ead;">int</span><span> flags = cs~</span><span style="color:#bf616a;">load_uint</span><span>(</span><span style="color:#d08770;">4</span><span>);
+</span><span style="color:#b48ead;">if </span><span>(flags &amp; </span><span style="color:#d08770;">1</span><span>) {
+</span><span>  </span><span style="color:#bf616a;">on_bounce</span><span>(in_msg_body);
+</span><span>  </span><span style="color:#b48ead;">return </span><span>();
+</span><span>}
+</span></code></pre>
+<p><code>on_bounce</code> function is defined here:</p>
+<iframe frameborder="0" style="width:100%; height:220px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L197-L206&lang=c"></iframe>
+<ol>
+<li><code>in_msg_body~skip_bits(32); ;; 0xFFFFFFFF</code>: we do this because <a href="https://docs.ton.org/develop/smart-contracts/guidelines/non-bouncable-messages">the body of the bounced message will contain 32 bit <code>0xffffffff</code> followed by 256 bit from original message</a>.</li>
+<li>we load the data with <code>load_data()</code>.</li>
+<li>the original <code>op</code> is retrieved by <code>int op = in_msg_body~load_uint(32);</code>. Recall that the structure of the message body is 32 bits of operation followed by 64 bits of query id.</li>
+<li><code>throw_unless(709, (op == op::internal_transfer()) | (op == op::burn_notification()));</code> throws if the bounced operation isn't internal transfer or burn notification. The error code is <code>static invalid_op = 709</code>.</li>
+<li><code>int query_id = in_msg_body~load_uint(64);</code> is loaded to get past the 64 bits.</li>
+<li><code>int jetton_amount = in_msg_body~load_coins();</code> loads the amount that was sent in the message body.</li>
+<li>The amount is credited again back to balance and written to the storage. This prevents failed messages from falsely deducting the balance. <pre data-lang="ts" style="background-color:#2b303b;color:#c0c5ce;" class="language-ts "><code class="language-ts" data-lang="ts"><span style="color:#bf616a;">balance </span><span>+= </span><span style="color:#bf616a;">jetton_amount</span><span>;
+</span><span style="color:#8fa1b3;">save_data</span><span>(</span><span style="color:#bf616a;">balance</span><span>, </span><span style="color:#bf616a;">owner_address</span><span>, </span><span style="color:#bf616a;">jetton_master_address</span><span>, </span><span style="color:#bf616a;">jetton_wallet_code</span><span>);
+</span></code></pre>
+</li>
+</ol>
+<p>We will understand this function better once we look at <code>send_tokens</code> and <code>burn_tokens</code> functions.</p>
+<h2 id="op-transfer">op::transfer</h2>
+<p>Next, we prepare arguments to use. Recall the <code>int_msg_info$0</code> constructor and its scheme. We are fast forwarding up to the end of <code>fwd_fee:Grams</code> in <code>src:MsgAddressInt dest:MsgAddressInt value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams</code>:</p>
+<iframe frameborder="0" style="width:100%; height:190px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L219-L226&lang=c"></iframe>
+<p><code>muldiv(cs~load_coins(), 3, 2)</code> means <code>floor(cs~load_coins() * 3 / 2)</code>, meaning it wants to get 1.5 times the original message's <code>fwd_fee</code>. <code>muldiv</code> is a multiple-then-divide operation. The intermediate result is stored in 513-bit integer, so it won't overflow if the actual result fits into a 257-bit integer. <sup class="footnote-reference"><a href="#1">1</a></sup></p>
+<p>The <a href="https://docs.ton.org/develop/smart-contracts/fee-calculation#forward-fee">forward fee</a> is for outgoing messages (any messages that go out of a contract).</p>
+<p>Now when the opcode is <code>op::transfer</code>, we call <code>send_tokens</code>:</p>
+<iframe frameborder="0" style="width:100%; height:123px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L228-L231&lang=c"></iframe>
+<iframe frameborder="0" style="width:100%; height:800px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L50-L98&lang=c"></iframe>
+<p>Let's break it down.</p>
+<ol>
+<li>
+<p>Note the TL-B schemes above <code>send_tokens</code> declaration:</p>
+<p><code>transfer</code> constructor is the message coming from the user's master wallet into this jetton wallet.
+<code>internal_transfer</code> constructor is the message going out of this jetton wallet.</p>
+<iframe frameborder="0" style="width:100%; height:210px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L39-L47&lang=c"></iframe>
+</li>
+<li>
+<p><code>int query_id = in_msg_body~load_uint(64);</code>. Remember we already loaded the opcode, so the next up is 64-bits  long <code>query_id</code>.</p>
+</li>
+<li>
+<p>The rest of <code>in_msg_body</code> is customizable. We can find the rest of the body at <code>wrappers/JettonWallet.ts</code>:</p>
+<iframe frameborder="0" style="width:100%; height:290px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fwrappers%2FJettonWallet.ts%23L38-L50&lang=c"></iframe>
+<p>After <code>query_id</code>, <code>jetton_amount</code>, specifying the amount to send, is stored by <code>int jetton_amount = in_msg_body~load_coins();</code>. Same for <code>to_owner_address</code>. The rest of the cell structure is pretty self-explanatory. Just refer to this while reading <code>send_tokens</code>.</p>
+</li>
+<li>
+<p><code>force_chain(to_owner_address);</code></p>
+<iframe frameborder="0" style="width:100%; height:160px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fparams.fc%23L1-L6&lang=c"></iframe>
+<p>The reason for calling this function can be traced back to the comment at the top of <code>jetton-wallet.fc</code> file:</p>
+<iframe frameborder="0" style="width:100%; height:60px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-wallet.fc%23L5-L5&lang=c"></iframe>
+<p>The TON Blockchain consists of one masterchain and up to $2^32$ workchains. Each workchain is a separate chain with its rules. Each workchain can further split into 260 shardchains, or sub-shards, containing a fraction of the workchain's state. Currently, only one workchain is operating on TON - Basechain <sup class="footnote-reference"><a href="#2">2</a></sup>. The Basechain has an <code>workchain_id</code> of 0.3
+So the default mode is always transferring within the same workchain; and without changing this line, the jetton will always be forced to be sent to the same workchain.</p>
+<p><a href="https://docs.ton.org/develop/func/stdlib#parse_std_addr"><code>parse_std_addr</code></a> returns the workchain id and account id. <code>int workchain() asm &quot;0 PUSHINT&quot;;</code> just means declaring a zero integer variable. Why zero? because we know that there is only one chain right now, which is the Basechain. And its workchain id is 0. So if <code>to_owner_address</code> is from another workchain whose workchain id isn't 0, <code>throw_unless(333, wc == workchain());</code> will throw.</p>
+</li>
+<li>
+<p><code>(int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();</code>. Load the data.</p>
+</li>
+<li>
+<p><code>balance -= jetton_amount;</code>. Deduct the amount being transferred.</p>
+</li>
+<li>
+<p><code>throw_unless(705, equal_slices(owner_address, sender_address));</code>. Throw if the message didn't come from the owner's wallet.</p>
+</li>
+<li>
+<p><code>throw_unless(706, balance &gt;= 0);</code>. Throw if the balance is insufficient.</p>
+</li>
+<li>
+<p><code>cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, jetton_wallet_code);</code>. </p>
+<iframe frameborder="0" style="width:100%; height:247px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-utils.fc%23L10-L17&lang=c"></iframe>
+<p>Don't know why the cell structure looks like this? Back to the TL-B scheme.</p>
+<iframe frameborder="0" style="width:100%; height:142px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Fton%2Fblob%2F5c392e0f2d946877bb79a09ed35068f7b0bd333a%2Fcrypto%2Fblock%2Fblock.tlb%23L144-L146&lang=c"></iframe>
+<ol>
+<li><code>store_uint(0, 2)</code>. Two bits of zeroes mean there's nothing in <code>split_depth</code> and <code>special</code>. So we go past them.</li>
+<li><code>store_dict(jetton_wallet_code)</code>. You might be wondering why <code>store_dict</code> instead of something like <code>store_ref</code>, because it's a cell? Well, <code>store_dict</code> actually looks like <code>builder store_dict(builder b, cell c) asm(c b) &quot;STDICT&quot;;</code> and stores dictionary <code>D</code> represented by cell <code>c</code> or <code>null</code> into builder <code>b</code>. In other words, stores 1-bit and a reference to <code>c</code> if <code>c</code> is not <code>null</code> and 0-bit otherwise. <sup class="footnote-reference"><a href="#3">3</a></sup> So it's a perfect use case for short-circuiting <code>Maybe ^Cell</code> at once, because <code>Maybe</code> requires 1 to be prefixed if there is something in it. For that reason, <a href="https://docs.ton.org/develop/func/stdlib#store_maybe_ref"><code>store_maybe_ref</code></a> is equivalent to store_dict`.</li>
+<li><code>.store_dict(pack_jetton_wallet_data(0, owner_address, jetton_master_address, jetton_wallet_code))</code></li>
+<li><code>.store_uint(0, 1)</code>. This is <code>library:(Maybe ^Cell)</code>. </li>
+</ol>
+</li>
+<li>
+<p><code>slice to_wallet_address = calculate_jetton_wallet_address(state_init);</code>. </p>
+<iframe frameborder="0" style="width:100%; height:226px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https%3A%2F%2Fgithub.com%2Fton-blockchain%2Ftoken-contract%2Fblob%2F21e7844fa6dbed34e0f4c70eb5f0824409640a30%2Fft%2Fjetton-utils.fc%23L19-L25&lang=c"></iframe>
+<p><code>calculate_jetton_wallet_address</code> takes the result of <code>calculate_jetton_wallet_state_init</code> and returns a wallet address. <code>to_wallet_address</code> will be <code>dest:MsgAddressInt</code> in <code>int_msg_info$0</code>, so we will need to refer to <code>MsgAddressInt</code> when looking into this.</p>
+<iframe frameborder="0" style="width:100%; height:120px;" allow="clipboard-write" src="https://embed-github.lazer1.xyz?gh=https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb&lines=L105-L108&lang=c"></iframe>
+<ol>
+<li><code>store_uint(4, 3)</code>. It stores <code>0b100</code>. The first <code>0b10</code> is for <code>addr_std$10</code> prefix. The next <code>0</code> is for <code>Maybe</code>, to say that there is none.</li>
+<li><code>.store_int(workchain(), 8)</code>. Store a 8-bit long workchain id, which is <code>0b00000000</code>. The workchain id is a signed 32-bit integer, but addr_std dictates that <code>workchain_id</code> needs to be <code>int8</code> in this specific type.</li>
+<li><a href="https://docs.ton.org/develop/func/stdlib#cell_hash"><code>cell_hash</code></a> returns 256-bit uint hash of a cell. <code>state_init</code> is composed of <code>jetton_wallet_code</code>, <code>owner_address</code>, and <code>jetton_master_address</code>, so every jetton wallet address is practically unique, because if it were a different jetton, owner, or a jetton creator, the hash would be different. This is <code>address:bits256</code>.</li>
+</ol>
+</li>
+<li>
+<p><code>slice response_address = in_msg_body~load_msg_addr();</code> This is <code>response_destination:MsgAddress</code> of <code>transfer</code> constructor.</p>
+</li>
+<li>
+<p><code>cell custom_payload = in_msg_body~load_dict();</code> is <code>custom_payload:(Maybe ^Cell)</code> of <code>transfer</code> constructor. We use <a href="https://docs.ton.org/develop/func/stdlib#load_dict"><code>load_dict()</code></a> here to load <code>Maybe ^Cell</code>, because it can be used for values of arbitrary <code>Maybe ^Y</code> types or a dictionary.</p>
+</li>
+<li>
+<p><code>int forward_ton_amount = in_msg_body~load_coins();</code> is loading <code>forward_ton_amount:(VarUInteger 16)</code>. Note that <code>VarUInteger 16</code> means $128 - 8 = 120$ bits of uint.</p>
+</li>
+<li>
+<p><code>throw_unless(708, slice_bits(in_msg_body) &gt;= 1);</code>. <code>slice_bits(in_msg_body)</code> will check if there is any remaining data if <code>slice_bits(in_msg_body) &gt;= 1</code> is not true. This can happen in case of a malformed forward payload. For example, if <code>forward_payload:(Either Cell ^Cell)</code> is not included in <code>in_msg_body</code> at all, this would throw because <code>slice_bits(in_msg_body) == 0</code>.</p>
+</li>
+<li>
+<p>Now that we checked that there's a remaining part of the message, we safely call <code>slice either_forward_payload = in_msg_body;</code>.</p>
+</li>
+<li>
+<p>We are now very used to this structure of cell; No explanation needed. This is <code>info:CommonMsgInfoRelaxed</code> and <code>init:(Maybe (Either StateInit ^StateInit))</code>.</p>
+<pre data-lang="ts" style="background-color:#2b303b;color:#c0c5ce;" class="language-ts "><code class="language-ts" data-lang="ts"><span style="color:#b48ead;">var </span><span style="color:#bf616a;">msg </span><span>= </span><span style="color:#8fa1b3;">begin_cell</span><span>()
+</span><span>    .</span><span style="color:#8fa1b3;">store_uint</span><span>(</span><span style="color:#d08770;">0x18</span><span>, </span><span style="color:#d08770;">6</span><span>)
+</span><span>    .</span><span style="color:#8fa1b3;">store_slice</span><span>(</span><span style="color:#bf616a;">to_wallet_address</span><span>)
+</span><span>    .</span><span style="color:#8fa1b3;">store_coins</span><span>(</span><span style="color:#d08770;">0</span><span>)
+</span><span>    .</span><span style="color:#8fa1b3;">store_uint</span><span>(</span><span style="color:#d08770;">4 </span><span>+ </span><span style="color:#d08770;">2 </span><span>+ </span><span style="color:#d08770;">1</span><span>, </span><span style="color:#d08770;">1 </span><span>+ </span><span style="color:#d08770;">4 </span><span>+ </span><span style="color:#d08770;">4 </span><span>+ </span><span style="color:#d08770;">64 </span><span>+ </span><span style="color:#d08770;">32 </span><span>+ </span><span style="color:#d08770;">1 </span><span>+ </span><span style="color:#d08770;">1 </span><span>+ </span><span style="color:#d08770;">1</span><span>)
+</span><span>    .</span><span style="color:#8fa1b3;">store_ref</span><span>(</span><span style="color:#bf616a;">state_init</span><span>);
+</span></code></pre>
+</li>
+<li>
+<p>Then, we construct the message body. We specify the opcode and query id. Then we store some variables based on the TL-B scheme provieded at the top of <code>send_tokens</code> function:</p>
+<pre data-lang="ts" style="background-color:#2b303b;color:#c0c5ce;" class="language-ts "><code class="language-ts" data-lang="ts"><span>query_id:</span><span style="color:#bf616a;">uint64 </span><span>amount:(</span><span style="color:#bf616a;">VarUInteger </span><span style="color:#d08770;">16</span><span>) from:</span><span style="color:#bf616a;">MsgAddress
+</span><span>response_address:</span><span style="color:#bf616a;">MsgAddress
+</span><span>forward_ton_amount:(</span><span style="color:#bf616a;">VarUInteger </span><span style="color:#d08770;">16</span><span>)
+</span><span>forward_payload:(</span><span style="color:#bf616a;">Either Cell </span><span>^</span><span style="color:#bf616a;">Cell</span><span>) 
+</span><span>= </span><span style="color:#bf616a;">InternalMsgBody</span><span>;
+</span></code></pre>
+</li>
+<li>
+<p><code>msg = msg.store_ref(msg_body);</code>. <code>msg_body</code> is stored in <code>msg</code> as a reference.</p>
+</li>
+<li>
+<p>forward fee. There will be three messages that will be created at maximum:</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>int fwd_count = forward_ton_amount ? 2 : 1;
+</span><span>throw_unless(709, msg_value &gt;
+</span><span>forward_ton_amount +
+</span><span>;; 3 messages: wal1-&gt;wal2,  wal2-&gt;owner, wal2-&gt;response
+</span><span>;; but last one is optional (it is ok if it fails)
+</span><span>fwd_count * fwd_fee +
+</span><span>(2 * gas_consumption() + min_tons_for_storage()));
+</span><span>;; universal message send fee calculation may be activated here
+</span><span>;; by using this instead of fwd_fee
+</span><span>;; msg_fwd_fee(to_wallet, msg_body, state_init, 15)
+</span></code></pre>
+<ol>
+<li>message from <code>owner_address</code> to <code>to_wallet_address</code></li>
+<li>message from <code>to_wallet_address</code> to the owner of <code>to_wallet_address</code> for transfer notification.</li>
+<li>message from <code>to_wallet_address</code> to <code>response_address</code> for excess mesasge. Only sent if any ton coins are left after paying the fees.</li>
+</ol>
+<p>We will get back to the forwarding fee later. For now, just note that we are checking if we have enough TON sent for forwarding, gas and storage.</p>
+</li>
+<li>
+<p><code>send_raw_message(msg.send_cell(), 64)</code>. 64 means &quot;carry all the remaining value of the inbound message in addition to the value initially indicated in the new message&quot;.</p>
+</li>
+<li>
+<p><code>save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);</code>. Finally, the updated balance is saved.</p>
+</li>
+</ol>
+<h2 id="op-internal-transfer">op::internal_transfer</h2>
+<h1 id="references">References</h1>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><a href="https://docs.ton.org/develop/func/builtins#integer-operations">[TON docs] Integer operations</a></p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p><a href="https://docs.ton.org/develop/blockchain/shards">[TON docs] Shards</a></p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p><a href="https://docs.ton.org/develop/func/stdlib#store_dict">[TON docs] <code>store_dict</code></a></p>
+</div>
+<p><a href="https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons">[TON Blog] How to shard your TON smart contract and why - studying the anatomy of TON's Jettons</a></p>
+<p><a href="https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers">[TON Blog] Six unique aspects of TON Blockchain that will surprise Solidity developers</a></p>
+<p><a href="https://excalidraw.com/#json=G8O---P5YSw45M_Fv9rzW,zU2SGCurOzwfre59EImQtQ">[Excalidraw] Contracts design diagram</a></p>
+<p><a href="https://github.com/dkeysil/awesome-ton-smart-contracts">[Github] awesome-ton-smart-contracts</a></p>
+<p><a href="https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb#L381">[Github] <code>block.tlb</code></a></p>
+<p><a href="https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc">[Github] <code>jetton-wallet.fc</code></a></p>
+<p><a href="https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc">[Github] <code>jetton-minter.fc</code></a></p>
+<p><a href="https://youtu.be/svOadLWwYaM">[Youtube] Technical Demo: Sharded Smart Contract Architecture for Smart Contract Developers</a></p>
+
+    <h1>Comments</h1>
+    <script src="https://giscus.app/client.js"
+        data-repo="lazer-1/lazer-1.github.io"
+        data-repo-id="R_kgDOJzlwUg"
+        data-category="Comments"
+        data-category-id="DIC_kwDOJzlwUs4Cevy9"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="dark"
+        data-lang="en"
+        data-loading="lazy"
+        crossorigin="anonymous"
+        async>
+    </script>
+</main>
+
+    <div class="dark-mode-buttons">
+        <button class="dark-mode-button" id="dark-mode-on"><img src="https://lazer1.xyz/dark_mode.svg" width="24" height="24" alt="Dark mode" aria-label="dark mode toggle" title="Dark mode"></button>
+        <button class="dark-mode-button" id="dark-mode-off"><img src="https://lazer1.xyz/light_mode.svg" width="24" height="24" alt="Light mode" aria-label="light mode toggle" title="Light mode"></button>
+    </div>
+    <script>
+        const cls = document.body.classList;
+        const getSessionTheme = sessionStorage.getItem("theme");
+        if (getSessionTheme === "dark") {
+            cls.toggle("dark-mode", true);
+        } else if (getSessionTheme === "light") {
+            cls.toggle("dark-mode", false);
+        } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            cls.toggle("dark-mode", true);
+        }
+
+        document.getElementById("dark-mode-on").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", true);
+            sessionStorage.setItem("theme", "dark");
+        });
+        document.getElementById("dark-mode-off").addEventListener("click", function(e) {
+            cls.toggle("dark-mode", false);
+            sessionStorage.setItem("theme", "light");
+        });
+    </script>
+    <noscript>
+        <style>
+            .dark-mode-buttons {
+                display: none;
+            }
+        </style>
+    </noscript>
+</body>
+</html>
